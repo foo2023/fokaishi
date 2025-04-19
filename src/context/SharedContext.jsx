@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import toastify from "../components/Toast";
 
 // initial value
@@ -14,6 +14,13 @@ const SharedContext = createContext({
 export function SharedProvider({ children }) {
   const [sharedData, setSharedData] = useState([]);
   const [ displayCreateForm, setDisplayCreateForm ] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('fokaishi');
+    if (stored) {
+      setSharedData(JSON.parse(stored));
+    }
+  },[]);
 
   /* 獲取上一個和下一個item 的 ID */
   function getNavItemHandler(id) {
@@ -33,6 +40,18 @@ export function SharedProvider({ children }) {
     setSharedData((prev) => {
       return prev.concat(newData);
     });
+
+    /* local storage */
+    // 先從 local storage 取出現有資料
+    const stored = localStorage.getItem('fokaishi');
+    let arr = stored ? JSON.parse(stored) : [];
+
+    // 插入新資料
+    arr.push(newData);
+
+    // 存回去 local storage
+    localStorage.setItem('fokaishi', JSON.stringify(arr));
+
     toastify("創建成功", "success");
   }
 
@@ -42,12 +61,24 @@ export function SharedProvider({ children }) {
         return item.id !== dataId
       });
     });
+
+    /*local storage */
+    // 取出現有的 local storage 數據
+    const stored = localStorage.getItem('fokaishi');
+    let arr = stored ? JSON.parse(stored) : [];
+
+    // 過濾掉要刪除的項目
+    const filt = arr.filter(item => item.id !== dataId);
+
+    //更新 local storage
+    localStorage.setItem('fokaishi', JSON.stringify(filt));
     toastify("刪除成功", "success");
   }
 
   function toogleCrtFormHandler() {
     setDisplayCreateForm(prev => !prev);
   }
+
   const context = {
     data: sharedData,
     getNavItemId: getNavItemHandler,
@@ -56,6 +87,7 @@ export function SharedProvider({ children }) {
     displayCreateForm: displayCreateForm,
     toggleDisplayCreateForm: toogleCrtFormHandler, 
   };
+  
   return (
     <SharedContext.Provider value={context}>
       {children}

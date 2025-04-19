@@ -15,6 +15,7 @@ function App() {
         {ctx.displayCreateForm ? <CreateForm /> : null}
         <ToastContainer />
         <main >
+        <div className='object-cover w-[100vw] h-[100vh] fixed top-0 left-0 '/>
         <video src="sunflower_bg_vid.mp4" className='object-cover w-[100vw] h-[100vh] fixed top-0 left-0 ' autoPlay loop muted>
           <source src="sunflower_bg_vid.mp4" type="video/mp4" />
           Your browser does not support HTML5 video.

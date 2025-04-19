@@ -36,3 +36,8 @@ main p {
 .tiptap p {
   font-size: calc(var(--base-font-size));
 }
+
+.out-limit {
+  border: dashed 2px red;
+  transition: top 0.1s ease, left 0.1s ease;
+}

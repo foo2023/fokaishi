@@ -3,11 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 const PreviewThumbnail = ({ bg, handleBackgroundChange }) => {
   const [mouseEnterPreview, setMouseEnterPreview] = useState(false);
   const intervalRef = useRef(null);
-  const previewedOnceRef = useRef(false); // 防止重複 preview
+  const [previewedOnce, setPreviewedOnce] = useState(false); // 防止重複 preview
 
   useEffect(() => {
-    if (mouseEnterPreview && !previewedOnceRef.current) {
-      previewedOnceRef.current = true;
+    if (mouseEnterPreview && !previewedOnce) {
+      setPreviewedOnce(true);
 
       intervalRef.current = setInterval(() => {
         console.count("Preview triggered!");
@@ -43,7 +43,7 @@ const PreviewThumbnail = ({ bg, handleBackgroundChange }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {previewedOnceRef.current && 
+      {previewedOnce && 
       <video
         src={bg.previewVideo}
         className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"

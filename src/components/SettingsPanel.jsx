@@ -3,6 +3,7 @@ import SettingsContext from '../context/SettingsContext';
 import PreviewThumbnail from './previewThumbnail';
 import { IoClose } from 'react-icons/io5';
 import { FiSettings } from 'react-icons/fi';
+import { FaUndo } from 'react-icons/fa';
 
 // 模擬背景選項
 const backgroundOptions = [
@@ -50,12 +51,12 @@ const SettingsPanel = () => {
   return (
     <div
       // style={{ width: 'var(--settings-panel)' }}
-      className={`${settingsCtx.settingsPanel ? 'p-4 h-[40vh]' : 'p-0 h-0'} w-full bottom-0 md:w-[var(--settings-panle)] md:h-full right-0 fixed z-40 bg-white/80 backdrop-blur-md rounded-xl shadow-md transition-all duration-700 overflow-auto`}
+      className={`${settingsCtx.settingsPanel ? 'p-4 h-[40vh]' : 'p-0 h-0'} w-full bottom-0 md:w-[var(--settings-panel)] md:h-full right-0 fixed z-40 bg-white/80 backdrop-blur-md rounded-xl shadow-md transition-all duration-700 overflow-auto`}
     >
       {settingsCtx.settingsPanel ?
         <>
           <div className='text-2xl flex justify-between items-center'>
-            <h2 className='flex gap-3 items-center'><FiSettings /> 設置</h2>
+            <h2 className='flex gap-3 items-center font-bold'><FiSettings /> 設置</h2>
             <button className="bg-gray-100/60 backdrop-blur-md rounded-full p-4 hover:bg-gray-200/60 cursor-pointer" onClick={settingsCtx.toggleSettingsPanel}>
               <IoClose />
             </button>
@@ -86,8 +87,8 @@ const SettingsPanel = () => {
           {/* 重設 */}
           <button
             onClick={handleReset}
-            className="w-full py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-semibold rounded"
-          >
+            className="w-full py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-semibold rounded flex items-center gap-3 justify-center cursor-pointer"
+          ><FaUndo />
             恢復預設設定
           </button>
         </>

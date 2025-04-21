@@ -19,7 +19,7 @@ function App() {
       <>
         <div 
           // style={{ width: 'calc(100% - var(--settings-panel))',}} 
-          className="w-full md:w-[calc(100% - var(--settings-panel))] h-full overflow-scroll">
+          className="w-full md:w-[calc(100%-var(--settings-panel))] h-full overflow-scroll">
           <Navbar />
           {ctx.displayCreateForm ? <CreateForm /> : null}
           <ToastContainer />

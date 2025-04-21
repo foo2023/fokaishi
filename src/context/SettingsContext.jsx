@@ -70,7 +70,7 @@ export function SettingsProvider({ children }) {
 
   // 當settingsPanel更新，更新 style UI
   useEffect(() => {
-    const size = settingsPanel ? '25vw' : '0px';
+    const size = settingsPanel ? '30vw' : '0px';
     document.documentElement.style.setProperty('--settings-panel', size);
   }, [settingsPanel]);
 

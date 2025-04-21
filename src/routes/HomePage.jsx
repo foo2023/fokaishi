@@ -13,7 +13,7 @@ const HomePage = () => {
         Your browser does not support HTML5 video.
       </video> */}
       
-      <div className='relative z-10 max-w-[1200px] mx-auto px-2.5 mt-6 '>
+      <div className='relative z-10 max-w-[1070px] mx-auto px-2.5 mt-6 '>
         {ctx.data.length > 0 ? (
           <ul className='grid grid-cols-3 gap-7'>
             {ctx.data.map((i) => {

@@ -26,7 +26,7 @@ const CreateForm = () => {
       id: Math.round(Math.random() * 10000000000000),
       title: inputTitle,
       description: inputDesc,
-      randomCover: `/random_cover/${Math.round(Math.random() * (8 - 0) + 0)}.jpg`,
+      randomCover: `/random_cover/${Math.floor(Math.random() * 21)}.jpg`,
     };
     ctx.addData(newData);
     onCancel();

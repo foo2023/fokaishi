@@ -4,6 +4,8 @@ import SharedContext from '../context/SharedContext';
 import { MdTextIncrease, MdTextDecrease, MdFullscreen, MdFullscreenExit } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import MovableNavItems from './MovableNavItems';
+import { FiSettings } from 'react-icons/fi';
+import SettingsContext from '../context/SettingsContext';
 
 const Navbar = () => {
   /* 全屏狀態追蹤 */
@@ -22,6 +24,7 @@ const Navbar = () => {
 
   /* context api */
   const ctx = useContext(SharedContext);
+  const settingsCtx = useContext(SettingsContext);
 
   /* 全局字體大小 */
   const [fontSize, setFontSize] = useState(15);
@@ -47,14 +50,9 @@ const Navbar = () => {
       onClick: ctx.toggleDisplayCreateForm,
     },
     {
-      tag: '字+',
-      icon: MdTextIncrease,
-      onClick: () => setFontSize(prev => prev + 5),
-    },
-    {
-      tag: '字-',
-      icon: MdTextDecrease,
-      onClick: () => setFontSize(prev => prev - 5),
+      tag: '設置',
+      icon: FiSettings,
+      onClick: settingsCtx.toggleSettingsPanel,
     },
   ];
 
@@ -105,29 +103,29 @@ const Navbar = () => {
             <button
               key={index}
               title={tag}
-              className='rounded-md p-2 bg-white hover:text-stone-700 cursor-pointer mr-2.5 shadow-md'
+              className='hover:text-stone-700 cursor-pointer mr-2'
               onClick={onClick}
             >
               <Icon className='size-6' />
             </button>
           ))}
-          <button title={'字體大小: ' + fontSize} className='rounded-md p-2 bg-white hover:text-stone-700 cursor-pointer mr-2.5 shadow-md'>字號：{fontSize}</button>
+          {optionsRight.map(({ tag, icon: Icon, onClick, show }, index) =>
+            show ? (
+              <button
+                key={index}
+                title={tag}
+                className='hover:text-stone-700 cursor-pointer mr-2'
+                onClick={onClick}
+              >
+                <Icon className='size-6' />
+              </button>
+            ) : null
+          )}
       </MovableNavItems>
 
       {/* 右邊按鈕 */}
       <div className='flex items-center'>
-        {optionsRight.map(({ tag, icon: Icon, onClick, show }, index) =>
-          show ? (
-            <button
-              key={index}
-              title={tag}
-              className='rounded-md p-2 bg-white hover:text-stone-700 cursor-pointer mr-2.5 shadow-md'
-              onClick={onClick}
-            >
-              <Icon className={!isFullScreen ? 'size-6' : 'size-9'} />
-            </button>
-          ) : null
-        )}
+        
       </div>
     </div>
   );

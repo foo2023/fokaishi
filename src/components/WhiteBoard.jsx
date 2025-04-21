@@ -1,9 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import SettingsContext from '../context/SettingsContext';
 
 const WhiteBoard = ({title, description}) => {
+  const settingsCtx = useContext(SettingsContext);
+
   /* 白板功能 */
   const whiteboardRef = useRef(null);
-  const [dimensions, setDimensions] = useState({ width: 800, height: 500 });
+
   const [isResizing, setIsResizing] = useState(false);
 
   const MAX_WIDTH = document.documentElement.clientWidth - 80;
@@ -18,7 +21,7 @@ const WhiteBoard = ({title, description}) => {
         const newWidth = e.clientX - rect.left;
         const newHeight = e.clientY - rect.top;
 
-        setDimensions({
+        settingsCtx.setWhiteBoard({
           width: Math.min(Math.max(MIN_WIDTH, newWidth), MAX_WIDTH),
           height: Math.min(Math.max(MIN_HEIGHT, newHeight), MAX_HEIGHT),
         });
@@ -39,7 +42,7 @@ const WhiteBoard = ({title, description}) => {
     <div
       ref={whiteboardRef}
       className="cursor-pointer bg-white/70 backdrop-blur-md rounded-xl shadow-xl border border-gray-200 relative z-10"
-      style={{ width: dimensions.width, height: dimensions.height }}
+      style={{ width: settingsCtx.whiteBoard.width, height: settingsCtx.whiteBoard.height }}
     >
       <div className='overflow-auto [width:inherit] [height:inherit]'>
         <div className="grid justify-center font-bold" dangerouslySetInnerHTML={{ __html: title }} />

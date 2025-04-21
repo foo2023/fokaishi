@@ -4,13 +4,16 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom';
 import { SharedProvider } from './context/SharedContext';
+import { SettingsProvider } from './context/SettingsContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <SharedProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <SettingsProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </SettingsProvider>
     </SharedProvider>   
   </StrictMode>,
 )

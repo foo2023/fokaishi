@@ -1,7 +1,20 @@
 @import "tailwindcss";
 
+html {
+  height: 100dvh;
+}
+
+body {
+  height: inherit;
+}
+
+#root {
+  height: inherit;
+  display: flex;
+}
+
 :root {
-  --base-font-size: 20px;
+  --settings-panel: 0px;
 }
 
 main h1 {

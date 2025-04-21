@@ -1,7 +1,10 @@
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import SettingsContext from '../context/SettingsContext';
 
-const MovableNavItems = ({ isFullScreen, children }) => {
+const MovableNavItems = ({ children }) => {
+  const settingsCtx = useContext(SettingsContext);
+
   /* 能夠移動的左側Navigation Item */
   const containerBox = useRef(null);
   const dragableItem = useRef(null);
@@ -48,10 +51,7 @@ const MovableNavItems = ({ isFullScreen, children }) => {
       coord.current.lastYPercent = percentY;
   
       // 儲存百分比位置
-      localStorage.setItem(
-        'navbar-drag-position',
-        JSON.stringify({ x: percentX, y: percentY })
-      );
+      settingsCtx.setNavbarPosition({ x: percentX, y: percentY })
     };
   
     const onMouseMove = (e) => {
@@ -99,9 +99,8 @@ const MovableNavItems = ({ isFullScreen, children }) => {
     window.addEventListener('mouseup', onMouseUp);
     container.addEventListener('mousemove', onMouseMove);
   
-    const saved = localStorage.getItem('navbar-drag-position');
-    if (saved) {
-      const { x, y } = JSON.parse(saved);
+    if (settingsCtx.navbarPosition) {
+      const { x, y } = settingsCtx.navbarPosition;
       coord.current.lastXPercent = x;
       coord.current.lastYPercent = y;
       // 等 DOM 完成後還原位置
@@ -119,16 +118,16 @@ const MovableNavItems = ({ isFullScreen, children }) => {
   }, []);
 
   return (
-    <div ref={containerBox} className={`${outOfLimit ? 'out-limit': ''} grow relative`}>
+    <div ref={containerBox} className={`${outOfLimit ? 'out-limit': ''} grow relative `}>
       {/* drag遮罩 (只在拖拉時顯示) */}
       {wasDragged && (
-        <div className={`absolute inset-0 z-20 backdrop-blur-sm bg-white/30 ${wasDragged ? 'dragging': ''}`} />
+        <div className={`absolute inset-0 z-20 bg-white/30 ${wasDragged ? 'dragging': ''}`} />
       )}
         {/* dragable item */}
       <div
         ref={dragableItem}
-        style={{ position: 'absolute', top: '0px', left: '0px', }}
-        className={!isFullScreen ? 'flex items-center' : 'hidden'}
+        style={{ position: 'relative', top: '0px', left: '0px', }}
+        className='flex items-center w-fit bg-amber-100/50 backdrop-blur-md p-2 rounded-xl shadow-xl'
       >{children}</div>
     </div>
   )

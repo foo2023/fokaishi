@@ -10,10 +10,11 @@ import { useRef } from "react";
 import React from "react";
 import SettingsContext from "./context/SettingsContext";
 import SettingsPanel from "./components/SettingsPanel";
+import { backgroundOptions } from "./utils/backgroundOptions";
 
 function App() {
   const ctx = useContext(SharedContext); 
-  const settingsCtx = useContext(SettingsContext);   
+  const settingsCtx = useContext(SettingsContext);
 
   return (
       <>
@@ -23,7 +24,7 @@ function App() {
           <Navbar />
           {ctx.displayCreateForm ? <CreateForm /> : null}
           <ToastContainer />
-          <video src={settingsCtx.background} className='object-cover top-0 fixed h-full w-full' autoPlay loop muted disablePictureInPicture playsInline={true}>
+          <video src={settingsCtx.background.path} className='object-cover top-0 fixed h-full w-full' autoPlay loop muted disablePictureInPicture playsInline={true}>
           </video>
           <main >
             <div className='object-cover fixed top-0 left-0 '></div>

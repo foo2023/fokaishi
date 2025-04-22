@@ -1,6 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
+import SettingsContext from '../context/SettingsContext';
+import { BsCheckCircleFill } from 'react-icons/bs';
 
 const PreviewThumbnail = ({ bg, handleBackgroundChange }) => {
+  const settingsCtx = useContext(SettingsContext);
+
   const [mouseEnterPreview, setMouseEnterPreview] = useState(false);
   const intervalRef = useRef(null);
   const [previewedOnce, setPreviewedOnce] = useState(false); // 防止重複 preview
@@ -32,17 +36,18 @@ const PreviewThumbnail = ({ bg, handleBackgroundChange }) => {
   };
 
   const handleClick = () => {
-    handleBackgroundChange(bg.path);
+    handleBackgroundChange(bg.id);
   };
 
   return (
     <div
       key={bg.path}
-      className="relative border rounded overflow-hidden cursor-pointer group"
+      className={`${ settingsCtx.background.id === bg.id ? "border-4 border-green-500" : "border" } relative rounded overflow-hidden cursor-pointer group`}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {settingsCtx.background.id === bg.id && <div className='z-10 absolute inset-0 w-full h-full object-cover transition-all duration-300 text-green-800 flex justify-center items-center' ><BsCheckCircleFill className='size-5'/></div>}
       {previewedOnce && 
       <video
         src={bg.previewVideo}
@@ -56,7 +61,7 @@ const PreviewThumbnail = ({ bg, handleBackgroundChange }) => {
         alt={bg.title}
         className="w-full h-20 object-cover"
       />
-      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs text-center">
+      <div className={`${settingsCtx.background.id === bg.id ? "bg-green-900/60" : "bg-black/60"} z-20 absolute bottom-0 left-0 right-0 text-white text-xs text-center`}>
         {bg.title}
       </div>
     </div>

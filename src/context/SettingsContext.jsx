@@ -1,14 +1,17 @@
 import { createContext, useEffect, useState } from "react";
 import toastify from "../components/Toast";
+import { backgroundOptions } from "../utils/backgroundOptions";
+
+const defaultBg = backgroundOptions[0]; // default sunflower bg
 
 const SettingsContext = createContext({
   navbarPosition: { x: 50, y: 0 },
   setNavbarPosition: ({ x, y }) => {},
-  whiteBoard: { width: 800, height: 500 },
+  whiteBoard: { width: 60, height: 50 }, // in percent
   setWhiteBoard: ({ width, height }) => {},
   fontSize: 15,
   serFontSize: (fontSize) => {},
-  background: 'bg/sunflower_bg_vid.mp4',
+  background: {id: defaultBg.id, path: defaultBg.path}, // default sunflower bg
   setBackground: (newBg) => {},
   settingsPanel: false,
   toggleSettingsPanel: () => {},
@@ -24,7 +27,7 @@ export function SettingsProvider({ children }) {
 
   const getInitialWhiteBoard = () => {
     const stored = localStorage.getItem('whiteboard-size');
-    return stored ? JSON.parse(stored) : { width: 800, height: 500 };
+    return stored ? JSON.parse(stored) : { width: 60, height: 50 }; // in percent
   };
 
   const getInitialFontSize = () => {
@@ -39,8 +42,13 @@ export function SettingsProvider({ children }) {
   }, []);
 
   const getInitialBackground = () => {
-    const stored = localStorage.getItem('background-video');
-    return stored ? stored : 'bg/sunflower_bg_vid.mp4';
+    const storedId = localStorage.getItem('background-video');
+    const bgPath = backgroundOptions.filter( i => i.id === storedId )[0].path;
+    if (storedId && bgPath) {
+      const stored = { id: storedId, path: bgPath };
+      return stored;
+    }
+    return { id: defaultBg.id, path: defaultBg.path }; // default background (sunflower bg)
   };
 
   // 狀態設置
@@ -65,7 +73,7 @@ export function SettingsProvider({ children }) {
   }, [fontSize]);
 
   useEffect(() => {
-    localStorage.setItem('background-video', background);
+    localStorage.setItem('background-video', background.id);
   }, [background]);
 
   // 當settingsPanel更新，更新 style UI
@@ -87,8 +95,10 @@ export function SettingsProvider({ children }) {
     setShareserFontSizedData(size);
   };
 
-  const setBackground = (newBg) => {
-    setBackgroundState(newBg);
+  const setBackground = (newBgId) => {
+    const bg = backgroundOptions.filter(i => i.id === newBgId);
+    const bgPath = bg[0].path;
+    setBackgroundState({ id: newBgId, path: bgPath });
   };
 
   const toggleSettingsPanel = () => {
@@ -98,9 +108,9 @@ export function SettingsProvider({ children }) {
   const setDefaultSettings = () => {
     localStorage.clear();
     setNavbarPositionState({ x: 50, y: 0 });
-    setWhiteBoardState({ width: 800, height: 500 });
+    setWhiteBoardState({ width: 60, height: 50 }); // in percent
     setShareserFontSizedData(15);
-    setBackgroundState('bg/sunflower_bg_vid.mp4');
+    setBackgroundState({ id: defaultBg.id, path: defaultBg.path }); // default sunflower bg
     toastify("恢復預設設定", "info");
   };
 

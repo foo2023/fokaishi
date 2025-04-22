@@ -22,22 +22,22 @@ const HomePage = () => {
                   <div className='group cursor mx-4 bg-amber-50/30 backdrop-blur-md pb-2 rounded-md drop-shadow-md overflow-hidden duration-200 hover:-translate-y-4'>
                       <button
                         title='刪除'
-                        className={`bg-red-100 text-red-400 p-2 rounded-4xl mx-0.5 opacity-0 group-hover:opacity-100 transition-all duration-200 delay-200 cursor-pointer absolute z-10 hover:translate-y-1 hover:bg-red-200 hover:text-red-500 `}
+                        className={`bg-red-100 text-red-400 p-2 rounded-4xl mx-0.5 opacity-0 group-hover:opacity-100 transition-all duration-200 delay-200 cursor-pointer absolute z-20 hover:translate-y-1 hover:bg-red-200 hover:text-red-500`}
                         onClick={() => {
                           ctx.removeData(i.id);
                         }}
                       >
                         <MdDelete />
                       </button>
-                    <Link to={`/${i.id}`}>
+                    <div>
+                      <Link to={`/${i.id}`} className="absolute h-full w-full z-10"/>
                       <div className='overflow-hidden h-[200px]'>
                         <img className="group-hover:scale-110 h-full w-full object-cover duration-200" src={i.randomCover || '/random_cover/0.jpg'}/>
                       </div>
                       <div>
                         <div className="group-hover:text-stone-700 mx-3 font-bold" dangerouslySetInnerHTML={{ __html: i.title }} />
                       </div>
-                      
-                    </Link>
+                    </div>
                   </div>
                   
                 </li>

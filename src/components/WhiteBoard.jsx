@@ -9,21 +9,23 @@ const WhiteBoard = ({title, description}) => {
 
   const [isResizing, setIsResizing] = useState(false);
 
-  const MAX_WIDTH = document.documentElement.clientWidth - 80;
-  const MAX_HEIGHT = document.documentElement.clientHeight - 50;
-  const MIN_WIDTH = 450;
-  const MIN_HEIGHT = 300;
+  const MAX_WIDTH = 98;
+  const MAX_HEIGHT = 98;
+  const MIN_WIDTH = 40;
+  const MIN_HEIGHT = 30;
 
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (isResizing) {
         const rect = whiteboardRef.current.getBoundingClientRect();
-        const newWidth = e.clientX - rect.left;
-        const newHeight = e.clientY - rect.top;
+        const checkX = ((e.clientX - rect.left) / document.documentElement.clientWidth) * 100;
+        const checkY = ((e.clientY - rect.top) / document.documentElement.clientHeight) * 100;
+        const finalX = Math.min(Math.max(checkX, MIN_WIDTH), MAX_WIDTH);
+        const finalY = Math.min(Math.max(checkY, MIN_HEIGHT), MAX_HEIGHT);
 
         settingsCtx.setWhiteBoard({
-          width: Math.min(Math.max(MIN_WIDTH, newWidth), MAX_WIDTH),
-          height: Math.min(Math.max(MIN_HEIGHT, newHeight), MAX_HEIGHT),
+          width: finalX,
+          height: finalY,
         });
       }
     };
@@ -42,7 +44,7 @@ const WhiteBoard = ({title, description}) => {
     <div
       ref={whiteboardRef}
       className="cursor-pointer bg-white/70 backdrop-blur-md rounded-xl shadow-xl border border-gray-200 relative z-10"
-      style={{ width: settingsCtx.whiteBoard.width, height: settingsCtx.whiteBoard.height }}
+      style={{ width: `${settingsCtx.whiteBoard.width}%`, height: `${settingsCtx.whiteBoard.height}%` }}
     >
       <div className='overflow-auto [width:inherit] [height:inherit]'>
         <div className="grid justify-center font-bold" dangerouslySetInnerHTML={{ __html: title }} />

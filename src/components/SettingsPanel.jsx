@@ -4,34 +4,8 @@ import PreviewThumbnail from './previewThumbnail';
 import { IoClose } from 'react-icons/io5';
 import { FiSettings } from 'react-icons/fi';
 import { FaUndo } from 'react-icons/fa';
+import { backgroundOptions } from '../utils/backgroundOptions';
 
-// 模擬背景選項
-const backgroundOptions = [
-  {
-    title: '向日葵',
-    path: 'bg/sunflower/main.mp4',
-    previewImage: 'bg/sunflower/thumbnail.jpg',
-    previewVideo: 'bg/sunflower/preview.mp4'
-  },
-  {
-    title: '柳樹',
-    path: 'bg/liushu/main.mp4',
-    previewImage: 'bg/liushu/thumbnail.jpg',
-    previewVideo: 'bg/liushu/preview.mp4'
-  },
-  {
-    title: '水墨畫',
-    path: 'bg/shuimohua/main.mp4',
-    previewImage: 'bg/shuimohua/thumbnail.jpg',
-    previewVideo: 'bg/shuimohua/preview.mp4'
-  },
-  {
-    title: '池塘',
-    path: 'bg/chitang/main.mp4',
-    previewImage: 'bg/chitang/thumbnail.jpg',
-    previewVideo: 'bg/chitang/preview.mp4'
-  },
-];
 
 const SettingsPanel = () => {
   const settingsCtx = useContext(SettingsContext);
@@ -40,8 +14,8 @@ const SettingsPanel = () => {
     settingsCtx.serFontSize(Number(e.target.value));
   };
 
-  const handleBackgroundChange = (path) => {
-    settingsCtx.setBackground(path);
+  const handleBackgroundChange = (id) => {
+    settingsCtx.setBackground(id);
   };
 
   const handleReset = () => {
@@ -50,7 +24,6 @@ const SettingsPanel = () => {
 
   return (
     <div
-      // style={{ width: 'var(--settings-panel)' }}
       className={`${settingsCtx.settingsPanel ? 'p-4 h-[40vh]' : 'p-0 h-0'} w-full bottom-0 md:w-[var(--settings-panel)] md:h-full right-0 fixed z-40 bg-white/80 backdrop-blur-md rounded-xl shadow-md transition-all duration-700 overflow-auto`}
     >
       {settingsCtx.settingsPanel ?

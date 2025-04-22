@@ -3,28 +3,18 @@ import { useParams } from 'react-router-dom';
 import SharedContext from '../context/SharedContext';
 import WhiteBoard from '../components/WhiteBoard';
 import SideNav from '../components/SideNav';
+import SettingsContext from '../context/SettingsContext';
 
 const Item = () => {
-  let data = [
-    {
-      id: 1,
-      title: "",
-      p: ``,
-    },
-    {
-      id: 2,
-      title: "阿彌陀佛",
-      p: ``,
-    }
-  ]
   const ctx = useContext(SharedContext);
+  const settingsCtx = useContext(SettingsContext);
   const { id }  = useParams();
   const dataMatch = ctx.data.filter((item) => {
       return item.id === Math.floor(id);
     })
 
   return (
-    <div className="fixed w-screen h-dvh flex items-center justify-center top-0">
+    <div className="w-full md:w-[calc(100%-var(--settings-panel))] h-full fixed flex items-center justify-center top-0">
       {dataMatch[0] ? (
         <>
           <WhiteBoard title={dataMatch[0].title} description={dataMatch[0].description} />

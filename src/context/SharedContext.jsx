@@ -18,9 +18,30 @@ export function SharedProvider({ children }) {
   useEffect(() => {
     const stored = localStorage.getItem('fokaishi');
     if (stored) {
-      setSharedData(JSON.parse(stored));
+      const parsed = JSON.parse(stored);
+  
+      const sorted = parsed.sort((a, b) => {
+        const aTime = a.dateTime ? new Date(a.dateTime).getTime() : null;
+        const bTime = b.dateTime ? new Date(b.dateTime).getTime() : null;
+  
+        if (aTime && bTime) {
+          // 都有時間：越接近現在（越新）排前面
+          return bTime - aTime;
+        } else if (aTime && !bTime) {
+          // a 有時間，b 沒有：a 在前
+          return -1;
+        } else if (!aTime && bTime) {
+          // b 有時間，a 沒有：b 在前
+          return 1;
+        } else {
+          // 都沒時間：維持原順序或進一步定義
+          return 0;
+        }
+      });
+  
+      setSharedData(sorted);
     }
-  },[]);
+  }, []);
 
   /* 獲取上一個和下一個item 的 ID */
   function getNavItemHandler(id) {

@@ -22,11 +22,13 @@ const CreateForm = () => {
 
   function submitHandler(event) {
     event.preventDefault();
+    const now = new Date();
     const newData = {
       id: Math.round(Math.random() * 10000000000000),
       title: inputTitle,
       description: inputDesc,
       randomCover: `/random_cover/${Math.floor(Math.random() * 21)}.jpg`,
+      dateTime: now.toISOString(), // 例如：2025-04-23T08:30:00.000Z
     };
     ctx.addData(newData);
     onCancel();

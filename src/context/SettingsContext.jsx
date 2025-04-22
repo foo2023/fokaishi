@@ -43,8 +43,9 @@ export function SettingsProvider({ children }) {
 
   const getInitialBackground = () => {
     const storedId = localStorage.getItem('background-video');
-    const bgPath = backgroundOptions.filter( i => i.id === storedId )[0].path;
-    if (storedId && bgPath) {
+    if (storedId) {
+      const getBgPath = backgroundOptions.filter( i => i.id === storedId )[0].path;
+      const bgPath = getBgPath ? getBgPath : defaultBg.id;
       const stored = { id: storedId, path: bgPath };
       return stored;
     }
@@ -106,7 +107,10 @@ export function SettingsProvider({ children }) {
   };
 
   const setDefaultSettings = () => {
-    localStorage.clear();
+    localStorage.removeItem("background-video");
+    localStorage.removeItem("font-size");
+    localStorage.removeItem("navbar-position");
+    localStorage.removeItem("whiteboard-size");
     setNavbarPositionState({ x: 50, y: 0 });
     setWhiteBoardState({ width: 60, height: 50 }); // in percent
     setShareserFontSizedData(15);

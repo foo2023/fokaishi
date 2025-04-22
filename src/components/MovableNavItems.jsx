@@ -121,13 +121,13 @@ const MovableNavItems = ({ children }) => {
     <div ref={containerBox} className={`${outOfLimit ? 'out-limit': ''} grow relative `}>
       {/* drag遮罩 (只在拖拉時顯示) */}
       {wasDragged && (
-        <div className={`absolute inset-0 z-20 bg-white/30 ${wasDragged ? 'dragging': ''}`} />
+        <div className={`pointer-events-auto absolute inset-0 z-20 bg-white/30 ${wasDragged ? 'dragging': ''}`} />
       )}
         {/* dragable item */}
       <div
         ref={dragableItem}
         style={{ position: 'relative', top: '0px', left: '0px', }}
-        className='flex items-center w-fit bg-amber-100/50 backdrop-blur-md p-2 rounded-xl shadow-xl'
+        className='flex items-center w-fit bg-amber-100/50 backdrop-blur-md p-2 rounded-xl shadow-xl pointer-events-auto'
       >{children}</div>
     </div>
   )

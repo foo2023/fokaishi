@@ -7,7 +7,7 @@ const HomePage = () => {
   const ctx = useContext(SharedContext);
 
   return (
-    <div className='w-full h-full'>
+    <div className='md:w-[calc(100%-var(--settings-panel))] w-full h-full overflow-scroll'>
       {/* <video src="sunflower_bg_vid.mp4" className='object-cover w-[100vw] h-[100vh] fixed top-0 left-0 ' autoPlay loop muted>
         <source src="sunflower_bg_vid.mp4" type="video/mp4" />
         Your browser does not support HTML5 video.
@@ -17,6 +17,30 @@ const HomePage = () => {
         {ctx.data.length > 0 ? (
           <ul className='grid grid-cols-3 gap-7'>
             {ctx.data.map((i) => {
+              let dateTime;
+              let labelDateTime;
+              let is3DaysBefore = false;
+              if (i.dateTime) {
+                dateTime = new Date(i.dateTime);
+                const now = new Date();
+                const diffMs = now - dateTime;
+                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                const diffHours = Math.floor(diffMs / (1000 * 60 * 24));
+
+                if (diffDays === 0) {
+                  labelDateTime = `${diffHours}小時前`;
+                  is3DaysBefore = true;
+                } else if (diffDays < 4) {
+                  // 幾天前顯示
+                  labelDateTime = `${diffDays}天前`;
+                  is3DaysBefore = true;
+                } else {
+                  // 超過或等於4天就顯示時間
+                  labelDateTime = dateTime.toLocaleString(); // 根據使用者地區格式化
+                }
+              } else {
+                labelDateTime = null;
+              }
               return (
                 <li key={i.id}>
                   <div className='group cursor mx-4 bg-amber-50/30 backdrop-blur-md pb-2 rounded-md drop-shadow-md overflow-hidden duration-200 hover:-translate-y-4'>
@@ -28,11 +52,16 @@ const HomePage = () => {
                         }}
                       >
                         <MdDelete />
-                      </button>
+                      </button>                      
                     <div>
                       <Link to={`/${i.id}`} className="absolute h-full w-full z-10"/>
-                      <div className='overflow-hidden h-[200px]'>
-                        <img className="group-hover:scale-110 h-full w-full object-cover duration-200" src={i.randomCover || '/random_cover/0.jpg'}/>
+                      <div className='overflow-hidden h-[200px] relative'>
+                        <img className="group-hover:scale-110 h-full w-full object-cover duration-200 relative" src={i.randomCover || '/random_cover/0.jpg'}/>
+                        {i.dateTime && 
+                          <div className={`${is3DaysBefore ? "bg-amber-500/60 text-white" : "bg-purple-600/60 text-white"} p-2 rounded-md absolute bottom-[5%] right-[10%] backdrop-blur-md`}>
+                            {labelDateTime}
+                          </div>
+                        }
                       </div>
                       <div>
                         <div className="group-hover:text-stone-700 mx-3 font-bold" dangerouslySetInnerHTML={{ __html: i.title }} />

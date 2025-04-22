@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Router, Routes, useLocation } from "react-router-dom";
 import Item from "./routes/Item"
 import HomePage from "./routes/HomePage"
 import Navbar from "./components/Navbar";
@@ -10,16 +10,16 @@ import { useRef } from "react";
 import React from "react";
 import SettingsContext from "./context/SettingsContext";
 import SettingsPanel from "./components/SettingsPanel";
-import { backgroundOptions } from "./utils/backgroundOptions";
+import { AnimatePresence } from 'framer-motion';
+import AnimatedPageWrapper from './components/AnimatedPageWrapper';
 
-function App() {
+export default function App() {
   const ctx = useContext(SharedContext); 
   const settingsCtx = useContext(SettingsContext);
 
   return (
       <>
         <div 
-          // style={{ width: 'calc(100% - var(--settings-panel))',}} 
           className="w-full md:w-[calc(100%-var(--settings-panel))] h-full overflow-scroll">
           <Navbar />
           {ctx.displayCreateForm ? <CreateForm /> : null}
@@ -28,12 +28,7 @@ function App() {
           </video>
           <main >
             <div className='object-cover fixed top-0 left-0 '></div>
-            <Routes>
-              <Route path="/" element={<HomePage />} >
-                <Route path="create"/>
-              </Route>
-              <Route path="/:id" element={<Item />}/>
-            </Routes>
+            <AnimatedRoutes />
           </main>
         </div>
         <SettingsPanel />
@@ -43,4 +38,16 @@ function App() {
   )
 }
 
-export default App
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<AnimatedPageWrapper><HomePage /></AnimatedPageWrapper>} >
+          <Route path="create"/>
+        </Route>
+        <Route path="/:id" element={<AnimatedPageWrapper><Item /></AnimatedPageWrapper>}/>
+      </Routes>
+    </AnimatePresence>
+  );
+}

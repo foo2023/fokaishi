@@ -96,7 +96,7 @@ const Navbar = () => {
   
 
   return (
-    <div className={`relative z-10 w-full mx-auto p-3.5 flex`}>
+    <div className={`relative z-10 w-full mx-auto p-3.5 flex pointer-events-none`}>
       {/* 左邊按鈕 */}
       <MovableNavItems isFullScreen={isFullScreen}>
           {optionsLeft.map(({ tag, icon: Icon, onClick }, index) => (

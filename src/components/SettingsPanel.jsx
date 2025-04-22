@@ -64,6 +64,10 @@ const SettingsPanel = () => {
           ><FaUndo />
             恢復預設設定
           </button>
+
+          {/* {關於} */}
+          <div className='mt-8 cursor-default text-amber-500 font-bold'>By 净土共修@2025</div>
+
         </>
         : <></>}
     </div>

@@ -30,14 +30,37 @@ const WhiteBoard = ({title, description}) => {
       }
     };
 
+    const handleTouchMove = (e) => {
+      if (isResizing) {
+        const rect = whiteboardRef.current.getBoundingClientRect();
+        const checkX = ((e.touches[0].clientX - rect.left) / document.documentElement.clientWidth) * 100;
+        const checkY = ((e.touches[0].clientY - rect.top) / document.documentElement.clientHeight) * 100;
+        const finalX = Math.min(Math.max(checkX, MIN_WIDTH), MAX_WIDTH);
+        const finalY = Math.min(Math.max(checkY, MIN_HEIGHT), MAX_HEIGHT);
+
+        settingsCtx.setWhiteBoard({
+          width: finalX,
+          height: finalY,
+        });
+      }
+    };
+
     const handleMouseUp = () => setIsResizing(false);
+
+    const handleTouchEnd = () => setIsResizing(false);
 
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
 
+    document.addEventListener('touchmove', handleTouchMove);
+    document.addEventListener('touchend', handleTouchEnd);
+
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isResizing]);
   return (
@@ -59,6 +82,7 @@ const WhiteBoard = ({title, description}) => {
       <div
         className="absolute right-0 bottom-0 w-5 h-5 bg-transparent cursor-nwse-resize"
         onMouseDown={() => setIsResizing(true)}
+        onTouchStart={() => setIsResizing(true)}
       >
         <div className="w-full h-full border-r-2 border-b-2 border-gray-400 rounded-sm"></div>
       </div>

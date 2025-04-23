@@ -33,6 +33,33 @@ const MovableNavItems = ({ children }) => {
       coord.current.startX = e.clientX;
       coord.current.startY = e.clientY;
     };
+
+    const onTouchStart = (e) => {
+      isClicked.current = true;
+      setWasDragged(false); // << 設置防止直接拖拉
+      coord.current.startX = e.touches[0].clientX;
+      coord.current.startY = e.touches[0].clientY;
+    };
+
+    const onTouchEnd = (e) => {
+      isClicked.current = false;
+      setWasDragged(false); // remain wasDragges back to false
+      
+      if (wasDragged) {
+        e.preventDefault(); // << 防止點擊行為
+        e.stopPropagation(); // << 可選：阻止冒泡以防影響子元件
+      }
+  
+      // 計算百分比位置
+      const percentX = (dragable.offsetLeft / container.offsetWidth) * 100;
+      const percentY = (dragable.offsetTop / container.offsetHeight) * 100;
+  
+      coord.current.lastXPercent = percentX;
+      coord.current.lastYPercent = percentY;
+  
+      // 儲存百分比位置
+      settingsCtx.setNavbarPosition({ x: percentX, y: percentY })
+    };
   
     const onMouseUp = (e) => {
       isClicked.current = false;
@@ -94,10 +121,52 @@ const MovableNavItems = ({ children }) => {
         setOutOfLimit(false);
       }
     };
+
+    function onTouchMove(e) {
+      const moveX = Math.abs(e.touches[0].clientX - coord.current.startX);
+      const moveY = Math.abs(e.touches[0].clientY - coord.current.startY);
+
+      if ( isClicked && (moveX > 5 || moveY > 5)) {
+        setWasDragged(true); // << 若移動超過5px，才視為拖拉
+      }
+  
+      const containerWidth = container.offsetWidth;
+      const containerHeight = container.offsetHeight;
+  
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+  
+      const deltaX = currentX - coord.current.startX;
+      const deltaY = currentY - coord.current.startY;
+  
+      const lastX = (coord.current.lastXPercent || 0) * containerWidth / 100;
+      const lastY = (coord.current.lastYPercent || 0) * containerHeight / 100;
+  
+      const nextX = lastX + deltaX;
+      const nextY = lastY + deltaY;
+  
+      const maxX = containerWidth - dragable.offsetWidth;
+      const maxY = containerHeight - dragable.offsetHeight;
+  
+      const boundedX = Math.max(0, Math.min(nextX, maxX));
+      const boundedY = Math.max(0, Math.min(nextY, maxY));
+  
+      dragable.style.left = `${(boundedX / containerWidth) * 100}%`;
+      dragable.style.top = `${(boundedY / containerHeight) * 100}%`;
+
+      if (nextY > maxY || nextX > maxX) {
+        setOutOfLimit(true);
+      } else {
+        setOutOfLimit(false);
+      }
+    }
   
     dragable.addEventListener('mousedown', onMouseDown);
+    dragable.addEventListener('touchstart', onTouchStart);
     window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('touchend', onTouchEnd);
     container.addEventListener('mousemove', onMouseMove);
+    dragable.addEventListener('touchmove', onTouchMove);
   
     if (settingsCtx.navbarPosition) {
       const { x, y } = settingsCtx.navbarPosition;
@@ -112,8 +181,11 @@ const MovableNavItems = ({ children }) => {
   
     return () => {
       dragable.removeEventListener('mousedown', onMouseDown);
+      dragable.removeEventListener('touchstart', onTouchStart);
       window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('touchend', onTouchEnd);
       container.removeEventListener('mousemove', onMouseMove);
+      dragable.removeEventListener('touchmove', onTouchMove);
     };
   }, []);
 

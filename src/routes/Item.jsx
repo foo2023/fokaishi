@@ -4,6 +4,7 @@ import SharedContext from '../context/SharedContext';
 import WhiteBoard from '../components/WhiteBoard';
 import SideNav from '../components/SideNav';
 import SettingsContext from '../context/SettingsContext';
+import { usePageTitle } from '../utils/usePageTitle';
 
 const Item = () => {
   const ctx = useContext(SharedContext);
@@ -11,7 +12,20 @@ const Item = () => {
   const { id }  = useParams();
   const dataMatch = ctx.data.filter((item) => {
       return item.id === Math.floor(id);
-    })
+    });
+
+  // 更新page 標題
+  function decodeHTMLEntities(str) {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = str;
+    return txt.value;
+  }
+  
+  usePageTitle(
+    decodeHTMLEntities(
+      dataMatch[0].title.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ')
+    )
+  );
 
   return (
     <div className="w-full md:w-[calc(100%-var(--settings-panel))] h-full fixed flex items-center justify-center top-0">

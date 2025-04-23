@@ -15,7 +15,7 @@ const HomePage = () => {
       
       <div className='relative z-10 max-w-[1070px] mx-auto px-2.5 mt-6 '>
         {ctx.data.length > 0 ? (
-          <ul className='grid grid-cols-3 gap-7'>
+          <ul className='grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-7'>
             {ctx.data.map((i) => {
               let dateTime;
               let labelDateTime;
@@ -43,7 +43,7 @@ const HomePage = () => {
               }
               return (
                 <li key={i.id}>
-                  <div className='group cursor mx-4 bg-amber-50/30 backdrop-blur-md pb-2 rounded-md drop-shadow-md overflow-hidden duration-200 hover:-translate-y-4'>
+                  <div className='group cursor mx-1 md:mx-4 bg-amber-50/30 backdrop-blur-md pb-2 rounded-md drop-shadow-md overflow-hidden duration-200 hover:-translate-y-4'>
                       <button
                         title='刪除'
                         className={`bg-red-100 text-red-400 p-2 rounded-4xl mx-0.5 opacity-0 group-hover:opacity-100 transition-all duration-200 delay-200 cursor-pointer absolute z-20 hover:translate-y-1 hover:bg-red-200 hover:text-red-500`}

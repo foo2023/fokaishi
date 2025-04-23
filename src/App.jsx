@@ -1,12 +1,11 @@
-import { Route, Router, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Item from "./routes/Item"
 import HomePage from "./routes/HomePage"
 import Navbar from "./components/Navbar";
 import { ToastContainer } from "react-toastify";
 import CreateForm from "./components/CreateForm";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import SharedContext from "./context/SharedContext";
-import { useRef } from "react";
 import React from "react";
 import SettingsContext from "./context/SettingsContext";
 import SettingsPanel from "./components/SettingsPanel";
@@ -20,14 +19,14 @@ export default function App() {
   return (
       <>
         <div 
-          className="w-full md:w-[calc(100%-var(--settings-panel))] h-full overflow-scroll">
+          className="w-full md:w-[calc(100%-var(--settings-panel))] h-full overflow-auto">
           <Navbar />
           {ctx.displayCreateForm ? <CreateForm /> : null}
           <ToastContainer />
-          <video src={settingsCtx.background.path} className='object-cover top-0 fixed h-full w-full' autoPlay loop muted disablePictureInPicture playsInline={true}>
-          </video>
+          <div className="fixed top-0 left-0 w-full h-full z-[-1] pointer-events-none">
+            <video src={settingsCtx.background.path} className="object-cover w-full h-full" autoPlay loop muted disablePictureInPicture playsInline={true} />
+          </div>
           <main >
-            <div className='object-cover fixed top-0 left-0 '></div>
             <AnimatedRoutes />
           </main>
         </div>

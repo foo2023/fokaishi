@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import SettingsContext from '../context/SettingsContext';
 import PreviewThumbnail from './previewThumbnail';
 import { IoClose } from 'react-icons/io5';
@@ -24,7 +24,7 @@ const SettingsPanel = () => {
 
   return (
     <div
-      className={`${settingsCtx.settingsPanel ? 'p-4 h-[40vh]' : 'p-0 h-0'} w-full bottom-0 md:w-[var(--settings-panel)] md:h-full right-0 fixed z-40 bg-white/80 backdrop-blur-md rounded-xl shadow-md transition-all duration-700 overflow-auto`}
+      className={`${settingsCtx.settingsPanel ? 'p-4 h-[40vh]' : 'p-0 h-0'} w-full bottom-0 md:w-[var(--settings-panel)] md:h-full right-0 fixed z-40 bg-white/80 backdrop-blur-md rounded-xl border-gray-600/60 border-2 transition-all duration-700 overflow-auto cursor-default`}
     >
       {settingsCtx.settingsPanel ?
         <>
@@ -44,7 +44,7 @@ const SettingsPanel = () => {
               max="30"
               value={settingsCtx.fontSize}
               onChange={handleFontSizeChange}
-              className="w-full"
+              className="w-full cursor-pointer"
             />
             <span>30px</span>
           </div>
@@ -66,7 +66,7 @@ const SettingsPanel = () => {
           </button>
 
           {/* {關於} */}
-          <div className='mt-8 cursor-default text-amber-500 font-bold'>By 净土共修@2025</div>
+          <div className='mt-8 text-amber-500 font-bold'>By 净土共修@2025</div>
 
         </>
         : <></>}

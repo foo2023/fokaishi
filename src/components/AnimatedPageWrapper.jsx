@@ -1,23 +1,4 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-
-// const useIsMediumUp = () => {
-//   const [isMediumUp, setIsMediumUp] = useState(false);
-
-//   useEffect(() => {
-//     const mediaQuery = window.matchMedia('(min-width: 768px)');
-//     const handler = (e) => setIsMediumUp(e.matches);
-
-//     setIsMediumUp(mediaQuery.matches); // 初始值
-//     mediaQuery.addEventListener('change', handler);
-
-//     return () => mediaQuery.removeEventListener('change', handler);
-//   }, []);
-
-//   return isMediumUp;
-// };
-
-// const isMediumUp = useIsMediumUp();
 
 const pageVariants = {
   initial: {

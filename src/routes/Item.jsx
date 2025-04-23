@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import SharedContext from '../context/SharedContext';
 import WhiteBoard from '../components/WhiteBoard';
 import SideNav from '../components/SideNav';
-import SettingsContext from '../context/SettingsContext';
 import { usePageTitle } from '../utils/usePageTitle';
 
 const Item = () => {
   const ctx = useContext(SharedContext);
-  const settingsCtx = useContext(SettingsContext);
   const { id }  = useParams();
   const dataMatch = ctx.data.filter((item) => {
       return item.id === Math.floor(id);

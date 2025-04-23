@@ -57,6 +57,7 @@ const PreviewThumbnail = ({ bg, handleBackgroundChange }) => {
         autoPlay
       />}
       <img
+        loading="lazy"
         src={bg.previewImage}
         alt={bg.title}
         className="w-full h-20 object-cover"

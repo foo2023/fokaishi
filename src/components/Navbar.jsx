@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaHome, FaRegPlusSquare } from "react-icons/fa";
 import SharedContext from '../context/SharedContext';
-import { MdTextIncrease, MdTextDecrease, MdFullscreen, MdFullscreenExit } from "react-icons/md";
-import { useNavigate } from 'react-router-dom';
+import { MdFullscreen, MdFullscreenExit } from "react-icons/md";
+import { useNavigate } from 'react-router';
 import MovableNavItems from './MovableNavItems';
 import { FiSettings } from 'react-icons/fi';
 import SettingsContext from '../context/SettingsContext';

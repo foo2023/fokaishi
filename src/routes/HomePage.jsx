@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import SharedContext from '../context/SharedContext';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { MdDelete } from "react-icons/md";
 
 const HomePage = () => {

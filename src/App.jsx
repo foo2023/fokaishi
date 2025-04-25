@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router";
 import Item from "./routes/Item"
 import HomePage from "./routes/HomePage"
 import Navbar from "./components/Navbar";
@@ -11,6 +11,7 @@ import SettingsContext from "./context/SettingsContext";
 import SettingsPanel from "./components/SettingsPanel";
 import { AnimatePresence } from 'framer-motion';
 import AnimatedPageWrapper from './components/AnimatedPageWrapper';
+import NotFound from "./routes/NotFound";
 
 export default function App() {
   const ctx = useContext(SharedContext); 
@@ -24,7 +25,7 @@ export default function App() {
           {ctx.displayCreateForm ? <CreateForm /> : null}
           <ToastContainer />
           <div className="fixed top-0 left-0 w-full h-full z-[-1] pointer-events-none">
-            <video src={settingsCtx.background.path} className="object-cover w-full h-full" autoPlay loop muted disablePictureInPicture playsInline={true} />
+            <video src={`/${settingsCtx.background.path}`} className="object-cover w-full h-full" autoPlay loop muted disablePictureInPicture playsInline={true} />
           </div>
           <main >
             <AnimatedRoutes />
@@ -42,10 +43,9 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<AnimatedPageWrapper><HomePage /></AnimatedPageWrapper>} >
-          <Route path="create"/>
-        </Route>
+        <Route path="/" element={<AnimatedPageWrapper><HomePage /></AnimatedPageWrapper>} />
         <Route path="/:id" element={<AnimatedPageWrapper><Item /></AnimatedPageWrapper>}/>
+        <Route path="*" element={<AnimatedPageWrapper><NotFound/></AnimatedPageWrapper>} />
       </Routes>
     </AnimatePresence>
   );

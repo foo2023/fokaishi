@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import SharedContext from '../context/SharedContext';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const SideNav = ({ id }) => {

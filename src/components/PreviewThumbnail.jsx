@@ -50,7 +50,7 @@ const PreviewThumbnail = ({ bg, handleBackgroundChange }) => {
       {settingsCtx.background.id === bg.id && <div className='z-10 absolute inset-0 w-full h-full object-cover transition-all duration-300 text-green-800 flex justify-center items-center' ><BsCheckCircleFill className='size-5'/></div>}
       {previewedOnce && 
       <video
-        src={bg.previewVideo}
+        src={`/${bg.previewVideo}`}
         className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         muted
         loop
@@ -58,7 +58,7 @@ const PreviewThumbnail = ({ bg, handleBackgroundChange }) => {
       />}
       <img
         loading="lazy"
-        src={bg.previewImage}
+        src={`/${bg.previewImage}`}
         alt={bg.title}
         className="w-full h-20 object-cover"
       />

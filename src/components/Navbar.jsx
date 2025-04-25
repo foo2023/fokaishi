@@ -1,15 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FaHome, FaRegPlusSquare } from "react-icons/fa";
 import SharedContext from '../context/SharedContext';
-import { MdFullscreen, MdFullscreenExit } from "react-icons/md";
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import MovableNavItems from './MovableNavItems';
-import { FiSettings } from 'react-icons/fi';
 import SettingsContext from '../context/SettingsContext';
+import { FaHouse, FaExpand, FaCompress, FaGear, FaSquarePlus } from 'react-icons/fa6';
 
 const Navbar = () => {
   /* 全屏狀態追蹤 */
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+  // 獲取用戶當前所在頁面的path
+  const location = useLocation();
+  const { hash, pathname, search } = location;
+  console.log(pathname);
 
   useEffect(() => {
     const handleFullScreenChange = () => {
@@ -33,34 +36,44 @@ const Navbar = () => {
   }, [fontSize]);
 
   const navigate = useNavigate();
+
+  const homePageToggle = () => {
+    if (pathname === '/') {
+      return true
+    } else {
+      return false;
+    }
+  }
   
   /* 左邊導航物件 */
   const optionsLeft = [
     {
       tag: '首頁',
-      icon: FaHome,
+      icon: FaHouse,
       onClick: () => {
         
         navigate('..');
       },
+      show: true,
+      toggle: homePageToggle(),
     },
     {
       tag: '創建',
-      icon: FaRegPlusSquare,
+      icon: FaSquarePlus,
       onClick: ctx.toggleDisplayCreateForm,
+      show: true,
+      toggle: ctx.displayCreateForm,
     },
     {
       tag: '設置',
-      icon: FiSettings,
+      icon: FaGear,
       onClick: settingsCtx.toggleSettingsPanel,
+      show: true,
+      toggle: settingsCtx.settingsPanel,
     },
-  ];
-
-  /* 右側導航物件 */
-  const optionsRight = [
     {
       tag: '全屏',
-      icon: MdFullscreen,
+      icon: FaExpand,
       onClick: () => {
         const element = document.documentElement;
         if (element.requestFullscreen) {
@@ -74,10 +87,11 @@ const Navbar = () => {
         }
       },
       show: !isFullScreen,
+      toggle: false,
     },
     {
       tag: '退出全屏',
-      icon: MdFullscreenExit,
+      icon: FaCompress,
       onClick: () => {
         if (document.exitFullscreen) {
           document.exitFullscreen();
@@ -90,43 +104,28 @@ const Navbar = () => {
         }
       },
       show: isFullScreen,
+      toggle: true,
     },
-  ];
+  ];  
 
-  
+  console.log(optionsLeft[0].toggle);
 
   return (
     <div className={`relative z-10 w-full mx-auto p-3.5 flex pointer-events-none`}>
-      {/* 左邊按鈕 */}
       <MovableNavItems isFullScreen={isFullScreen}>
-          {optionsLeft.map(({ tag, icon: Icon, onClick }, index) => (
-            <button
-              key={index}
-              title={tag}
-              className='hover:text-stone-700 cursor-pointer mr-2'
-              onClick={onClick}
-            >
-              <Icon className='size-6' />
-            </button>
-          ))}
-          {optionsRight.map(({ tag, icon: Icon, onClick, show }, index) =>
-            show ? (
+        {optionsLeft.map(({ tag, icon: Icon, onClick, show, toggle }, index) => (
+            show && (
               <button
                 key={index}
                 title={tag}
-                className='hover:text-stone-700 cursor-pointer mr-2'
+                className={`${toggle ? 'text-red-300 hover:text-red-400 animate-[bounceUp_2s_infinite]' : 'hover:text-stone-700' } cursor-pointer mr-2`}
                 onClick={onClick}
               >
-                <Icon className='size-6' />
+                <Icon className='size-6' strokeWidth={toggle ? 20 : 0} stroke="red" size={20} fill='currentColor' />
               </button>
-            ) : null
-          )}
+            )
+        ))}
       </MovableNavItems>
-
-      {/* 右邊按鈕 */}
-      <div className='flex items-center'>
-        
-      </div>
     </div>
   );
 };

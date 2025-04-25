@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import SharedContext from '../context/SharedContext';
 import { Link } from 'react-router';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { FaCaretLeft, FaCaretRight } from 'react-icons/fa6';
 
 const SideNav = ({ id }) => {
   const ctx = useContext(SharedContext);
@@ -17,7 +17,7 @@ const SideNav = ({ id }) => {
       {navIds.prev ? (
         <button className='rounded-full p-2 bg-white hover:text-stone-700 cursor-pointer mr-2.5 shadow-md z-20'>
           <Link to={`/${navIds.prev}`}>
-            <FaArrowLeft className='size-6'/>
+            <FaCaretLeft className='size-6'/>
           </Link>  
         </button>
         
@@ -26,7 +26,7 @@ const SideNav = ({ id }) => {
       {navIds.next ? (
         <button className='rounded-full p-2 bg-white hover:text-stone-700 cursor-pointer mr-2.5 shadow-md z-20'>
           <Link to={`/${navIds.next}`}>
-            <FaArrowRight className='size-6'/>
+            <FaCaretRight className='size-6'/>
           </Link>
         </button>
       ) : <div />}

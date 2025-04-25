@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React, { Suspense, useContext } from 'react';
 import SettingsContext from '../context/SettingsContext';
-import PreviewThumbnail from './previewThumbnail';
-import { IoClose } from 'react-icons/io5';
-import { FiSettings } from 'react-icons/fi';
-import { FaUndo } from 'react-icons/fa';
+import { FaGear, FaXmark, FaRotateRight } from 'react-icons/fa6';
 import { backgroundOptions } from '../utils/backgroundOptions';
+import LoadingSkeleton from './ui/LoadingSkeleton';
+const PreviewThumbnail = React.lazy(() => import('./PreviewThumbnail'));
 
 
 const SettingsPanel = () => {
@@ -29,9 +28,9 @@ const SettingsPanel = () => {
       {settingsCtx.settingsPanel ?
         <>
           <div className='text-2xl flex justify-between items-center'>
-            <h2 className='flex gap-3 items-center font-bold'><FiSettings /> 設置</h2>
+            <h2 className='flex gap-3 items-center font-bold'><FaGear /> 設置</h2>
             <button className="bg-gray-100/60 backdrop-blur-md rounded-full p-4 hover:bg-gray-200/60 cursor-pointer" onClick={settingsCtx.toggleSettingsPanel}>
-              <IoClose />
+              <FaXmark />
             </button>
           </div>
           {/* 字體設定 */}
@@ -52,16 +51,21 @@ const SettingsPanel = () => {
           {/* 背景設定 */}
           <h3 className="text-lg font-bold mb-2">背景</h3>
           <div className="grid grid-cols-3 gap-2 mb-6">
-            {backgroundOptions.map((bg, index) => (
-              <PreviewThumbnail key={index} bg={ bg } handleBackgroundChange={handleBackgroundChange} />
-            ))}
+              {backgroundOptions.map((bg, index) => (
+                <div className='className="w-full h-20'>
+                  <Suspense fallback={<LoadingSkeleton />}>
+                    <PreviewThumbnail key={index} bg={ bg } handleBackgroundChange={handleBackgroundChange} />
+                  </Suspense>
+                </div>
+              ))} 
+            
           </div>
 
           {/* 重設 */}
           <button
             onClick={handleReset}
             className="w-full py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-semibold rounded flex items-center gap-3 justify-center cursor-pointer"
-          ><FaUndo />
+          ><FaRotateRight />
             恢復預設設定
           </button>
 

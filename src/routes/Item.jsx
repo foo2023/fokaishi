@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router';
 import SharedContext from '../context/SharedContext';
 import WhiteBoard from '../components/WhiteBoard';
@@ -10,17 +10,7 @@ const Item = () => {
   const { id }  = useParams();
   const dataMatch = ctx.data.filter((item) => {
     return item.id === Math.floor(id);
-  });
-  // function initialDataMatch () {
-  //   const dataMatch = ctx.data.filter((item) => {
-  //     return item.id === Math.floor(id);
-  //   });
-
-  //   return dataMatch;
-  // }
-
-  // const [dataMatch, setDataMatch] = useState(initialDataMatch);
-  
+  }); 
 
   // 更新page 標題
   function decodeHTMLEntities(str) {

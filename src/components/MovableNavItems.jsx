@@ -190,7 +190,7 @@ const MovableNavItems = ({ children }) => {
   }, []);
 
   return (
-    <div ref={containerBox} className={`${outOfLimit ? 'out-limit': ''} grow relative  max-w-full overflow-x-hidden`}>
+    <div ref={containerBox} className={`${outOfLimit ? 'out-limit': ''} grow relative  max-w-full overflow-visible`}>
       {/* drag遮罩 (只在拖拉時顯示) */}
       {wasDragged && (
         <div className={`pointer-events-auto absolute inset-0 z-20 bg-white/30 ${wasDragged ? 'dragging': ''}`} />

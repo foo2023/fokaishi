@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import 'chiron-go-round-tc-webfont-truetype/css/vf.css';
 
 html {
   height: 100dvh;
@@ -8,6 +9,7 @@ html {
 
 body {
   height: inherit;
+  font-family: var(--g-font-family);
 }
 
 #root {

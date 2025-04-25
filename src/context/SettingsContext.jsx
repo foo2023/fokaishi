@@ -11,6 +11,8 @@ const SettingsContext = createContext({
   setWhiteBoard: ({ width, height }) => {},
   fontSize: 15,
   serFontSize: (fontSize) => {},
+  fontFamily: ['sans-serif'],
+  setFontFamily: (fontFamily) => {},
   background: {id: defaultBg.id, path: defaultBg.path}, // default sunflower bg
   setBackground: (newBg) => {},
   settingsPanel: false,
@@ -35,6 +37,11 @@ export function SettingsProvider({ children }) {
     return stored ? Number(stored) : 15;
   };
 
+  const getInitialFontFamily = () => {
+    const stored = localStorage.getItem('font-family');
+    return stored ? JSON.parse(stored) : ['sans-serif'];
+  }
+
   // 初始化 字體大小在界面Ui顯示使用 style
   useEffect(() => {
     const initialFontSize = getInitialFontSize();
@@ -56,6 +63,7 @@ export function SettingsProvider({ children }) {
   const [navbarPosition, setNavbarPositionState] = useState(getInitialNavbarPosition);
   const [whiteBoard, setWhiteBoardState] = useState(getInitialWhiteBoard);
   const [fontSize, setShareserFontSizedData] = useState(getInitialFontSize);
+  const [fontFamily, setFontFamily] = useState(getInitialFontFamily);
   const [background, setBackgroundState] = useState(getInitialBackground);
   const [settingsPanel, setSettingsPanel] = useState(false);
 
@@ -72,6 +80,11 @@ export function SettingsProvider({ children }) {
     localStorage.setItem('font-size', fontSize.toString());
     document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
   }, [fontSize]);
+
+  useEffect(() => {
+    localStorage.setItem('font-family', JSON.stringify(fontFamily));
+    document.documentElement.style.setProperty('--g-font-family', fontFamily);
+  }, [fontFamily]);
 
   useEffect(() => {
     localStorage.setItem('background-video', background.id);
@@ -125,6 +138,8 @@ export function SettingsProvider({ children }) {
     setWhiteBoard,
     fontSize,
     serFontSize,
+    fontFamily,
+    setFontFamily,
     background,
     setBackground,
     settingsPanel,

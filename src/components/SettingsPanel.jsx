@@ -23,7 +23,7 @@ const SettingsPanel = () => {
 
   return (
     <div
-      className={`${settingsCtx.settingsPanel ? 'p-4 h-[40vh]' : 'p-0 h-0'} w-full bottom-0 md:w-[var(--settings-panel)] md:h-full right-0 fixed z-40 bg-white/80 backdrop-blur-md rounded-xl border-gray-600/60 border-2 transition-all duration-700 overflow-auto cursor-default`}
+      className={`${settingsCtx.settingsPanel ? 'p-4 h-[40vh]' : 'p-0 h-0 w-0 border-[0]'} w-full bottom-0 md:w-[var(--settings-panel)] md:h-full right-0 fixed z-40 bg-white/80 backdrop-blur-md rounded-xl border-gray-600/60 border-2 transition-all duration-700 cursor-default`}
     >
       {settingsCtx.settingsPanel ?
         <>
@@ -33,44 +33,61 @@ const SettingsPanel = () => {
               <FaXmark />
             </button>
           </div>
-          {/* 字體設定 */}
-          <h3 className="text-lg font-bold mb-2">字體</h3>
-          <div className="flex items-center gap-2 mb-4">
-            <span>5px</span>
-            <input
-              type="range"
-              min="5"
-              max="30"
-              value={settingsCtx.fontSize}
-              onChange={handleFontSizeChange}
-              className="w-full cursor-pointer"
-            />
-            <span>30px</span>
+          <div className='overflow-scroll h-full w-full'>
+            {/* 字體設定 */}
+            <h3 className="text-lg font-bold mb-2">字號</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <span>5px</span>
+              <input
+                type="range"
+                min="5"
+                max="30"
+                value={settingsCtx.fontSize}
+                onChange={handleFontSizeChange}
+                className="w-full cursor-pointer"
+              />
+              <span>30px</span>
+            </div>
+            <h3 className="text-lg font-bold mb-2">字形</h3>
+            <div className='flex gap-2.5 mb-4'>
+              <div title="切換為本地電腦的默認字體" className='w-16 h-16 rounded-md overflow-hidden border-2 border-black relative cursor-pointer bg-white' onClick={() => {
+                settingsCtx.setFontFamily(['sans-serif'])
+              }}>
+                <p className='text-5xl text-center font-serif my-2'>佛</p>
+                <p className='absolute bottom-0 w-full h-auto bg-black/60 text-xs text-white text-center'>默認字體</p>
+              </div>
+              <div title="此字體包將從雲端加載下來" className='w-16 h-16 rounded-md overflow-hidden border-2 border-black relative cursor-pointer' onClick={() => {
+                settingsCtx.setFontFamily(['"Chiron GoRound TC WS"', 'sans-serif'])
+              }}>
+                <img className='object-cover' src='/huanfangFont.jpg'/>
+                <p className='absolute bottom-0 w-full h-auto bg-black/60 text-xs text-white text-center'>昭源環方</p>
+              </div>
+            </div>
+
+            {/* 背景設定 */}
+            <h3 className="text-lg font-bold mb-2">背景</h3>
+            <div className="grid grid-cols-3 gap-2 mb-6">
+                {backgroundOptions.map((bg, index) => (
+                  <div className='className="w-full h-20'>
+                    <Suspense fallback={<LoadingSkeleton />}>
+                      <PreviewThumbnail key={index} bg={ bg } handleBackgroundChange={handleBackgroundChange} />
+                    </Suspense>
+                  </div>
+                ))} 
+              
+            </div>
+
+            {/* 重設 */}
+            <button
+              onClick={handleReset}
+              className="w-full py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-semibold rounded flex items-center gap-3 justify-center cursor-pointer"
+            ><FaRotateRight />
+              恢復預設設定
+            </button>
+
+            {/* {關於} */}
+            <div className='mt-8 text-amber-500 font-bold'>By 净土共修@2025</div>
           </div>
-
-          {/* 背景設定 */}
-          <h3 className="text-lg font-bold mb-2">背景</h3>
-          <div className="grid grid-cols-3 gap-2 mb-6">
-              {backgroundOptions.map((bg, index) => (
-                <div className='className="w-full h-20'>
-                  <Suspense fallback={<LoadingSkeleton />}>
-                    <PreviewThumbnail key={index} bg={ bg } handleBackgroundChange={handleBackgroundChange} />
-                  </Suspense>
-                </div>
-              ))} 
-            
-          </div>
-
-          {/* 重設 */}
-          <button
-            onClick={handleReset}
-            className="w-full py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-semibold rounded flex items-center gap-3 justify-center cursor-pointer"
-          ><FaRotateRight />
-            恢復預設設定
-          </button>
-
-          {/* {關於} */}
-          <div className='mt-8 text-amber-500 font-bold'>By 净土共修@2025</div>
 
         </>
         : <></>}

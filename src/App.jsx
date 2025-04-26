@@ -24,6 +24,7 @@ import AnimatedPageWrapper from './components/AnimatedPageWrapper';
 import NotFound from "./routes/NotFound";
 import HomePageLoad from "./components/ui/HomePageLoad";
 import ItemPageLoad from "./components/ui/ItemPageLoad";
+import Test from "./routes/Test";
 
 export default function App() {
   const ctx = useContext(SharedContext); 
@@ -57,8 +58,9 @@ function AnimatedRoutes() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
             <Route path="/" element={<AnimatedPageWrapper><HomePage /></AnimatedPageWrapper>} />
+            <Route path="/test" element={<AnimatedPageWrapper><Test /></AnimatedPageWrapper>}/>
             <Route path="/:id" element={<AnimatedPageWrapper><Item /></AnimatedPageWrapper>}/>
-          <Route path="*" element={<AnimatedPageWrapper><NotFound/></AnimatedPageWrapper>} />
+            <Route path="*" element={<AnimatedPageWrapper><NotFound/></AnimatedPageWrapper>} />
         </Routes>
       </AnimatePresence>
     </Suspense>

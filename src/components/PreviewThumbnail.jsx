@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import SettingsContext from '../context/SettingsContext';
-import { BsCheckCircleFill } from 'react-icons/bs';
+import { FaCircleCheck } from 'react-icons/fa6';
 
 const PreviewThumbnail = ({ bg, handleBackgroundChange }) => {
   const settingsCtx = useContext(SettingsContext);
@@ -47,7 +47,7 @@ const PreviewThumbnail = ({ bg, handleBackgroundChange }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {settingsCtx.background.id === bg.id && <div className='z-10 absolute inset-0 w-full h-full object-cover transition-all duration-300 text-green-800 flex justify-center items-center' ><BsCheckCircleFill className='size-5'/></div>}
+      {settingsCtx.background.id === bg.id && <div className='z-10 absolute inset-0 w-full h-full object-cover transition-all duration-300 text-green-500 flex justify-center items-center' ><FaCircleCheck className='size-5' fill='currentColor' stroke='white' strokeWidth={50}/></div>}
       {previewedOnce && 
       <video
         src={`/${bg.previewVideo}`}

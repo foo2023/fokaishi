@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import toastify from "../components/Toast";
 import { backgroundOptions } from "../utils/backgroundOptions";
+import { localFontFamily, initLocalSupportedFont, fontFamilyOptions } from "../utils/fontFamilyOptions";
 
 const defaultBg = backgroundOptions[0]; // default sunflower bg
 
@@ -11,8 +12,9 @@ const SettingsContext = createContext({
   setWhiteBoard: ({ width, height }) => {},
   fontSize: 15,
   serFontSize: (fontSize) => {},
-  fontFamily: ['sans-serif'],
-  setFontFamily: (fontFamily) => {},
+  fontFamilyId: 'sans-serif',
+  setFontFamilyId: (fontFamilyId) => {},
+  localSupportedFonts: [],
   background: {id: defaultBg.id, path: defaultBg.path}, // default sunflower bg
   setBackground: (newBg) => {},
   settingsPanel: false,
@@ -37,11 +39,6 @@ export function SettingsProvider({ children }) {
     return stored ? Number(stored) : 15;
   };
 
-  const getInitialFontFamily = () => {
-    const stored = localStorage.getItem('font-family');
-    return stored ? JSON.parse(stored) : ['sans-serif'];
-  }
-
   // 初始化 字體大小在界面Ui顯示使用 style
   useEffect(() => {
     const initialFontSize = getInitialFontSize();
@@ -59,13 +56,68 @@ export function SettingsProvider({ children }) {
     return { id: defaultBg.id, path: defaultBg.path }; // default background (sunflower bg)
   };
 
+  const getInitialFontFamilyId = () => {
+    const stored = localStorage.getItem('font-family');
+    let parsed;
+    try {
+      parsed = JSON.parse(stored);
+    } catch (e) {
+      parsed = null;
+    }
+
+  
+    if ( localSupportedFonts !== null ) {
+      if (Array.isArray(parsed)) {
+        // 是舊格式 (array)，要清掉
+        localStorage.removeItem("font-family");
+        return localSupportedFonts[0];
+      } else if (!parsed) {
+        return localSupportedFonts[0];
+      } else {
+        console.log("local storage", parsed);
+        if ( checkFontsAvailable(parsed) ) {
+          return parsed;
+        } else {
+          return localSupportedFonts[0];
+        }
+      }
+    } else {
+      console.log("找不到 localSupportFonts!");
+    }
+  }
+  
+  const checkFontsAvailable = (font) => {
+    return (
+      localSupportedFonts.includes(font) ||
+      fontFamilyOptions.some((f) => f.id === font)
+    );
+  };
+
   // 狀態設置
   const [navbarPosition, setNavbarPositionState] = useState(getInitialNavbarPosition);
   const [whiteBoard, setWhiteBoardState] = useState(getInitialWhiteBoard);
   const [fontSize, setShareserFontSizedData] = useState(getInitialFontSize);
-  const [fontFamily, setFontFamily] = useState(getInitialFontFamily);
+  const [fontFamilyId, setFontFamilyId] = useState(null); // 初始為 null
+  const [localSupportedFonts, setLocalSupportedFonts] = useState(null);
   const [background, setBackgroundState] = useState(getInitialBackground);
   const [settingsPanel, setSettingsPanel] = useState(false);
+
+  useEffect(() => {
+    const checkFonts = async () => {
+      console.log("開始執行 checking local support 的 font family!!");
+      const fonts = await initLocalSupportedFont();
+      setLocalSupportedFonts(fonts);
+    };
+    
+    checkFonts();
+  }, []);
+
+  useEffect(() => {
+    console.log("local supported font: ", localSupportedFonts);
+    const initFont = getInitialFontFamilyId(); // 改為普通函式
+    setFontFamilyId(initFont);
+    console.log("getInitFont:", initFont);
+  }, [localSupportedFonts]); // 等 localSupportedFonts 有值後再初始化
 
   // 自動儲存到 localStorage
   useEffect(() => {
@@ -81,10 +133,20 @@ export function SettingsProvider({ children }) {
     document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
   }, [fontSize]);
 
-  useEffect(() => {
-    localStorage.setItem('font-family', JSON.stringify(fontFamily));
-    document.documentElement.style.setProperty('--g-font-family', fontFamily);
-  }, [fontFamily]);
+  if (fontFamilyId) {
+        localStorage.setItem('font-family', JSON.stringify(fontFamilyId));
+        let fontFamily;
+        const localFontFind = localFontFamily.find(item => item.id === fontFamilyId);
+        const cloudFontFind = fontFamilyOptions.find(item => item.id === fontFamilyId);
+        if (localFontFind) {
+          fontFamily = localFontFind.fontFamily;
+        } else if (cloudFontFind) {
+          fontFamily = cloudFontFind.fontFamily;
+        } else {
+          console.log("找不到字體 font family!");
+        }
+        document.documentElement.style.setProperty('--g-font-family', fontFamily);
+  }
 
   useEffect(() => {
     localStorage.setItem('background-video', background.id);
@@ -138,8 +200,9 @@ export function SettingsProvider({ children }) {
     setWhiteBoard,
     fontSize,
     serFontSize,
-    fontFamily,
-    setFontFamily,
+    fontFamilyId,
+    setFontFamilyId,
+    localSupportedFonts,
     background,
     setBackground,
     settingsPanel,

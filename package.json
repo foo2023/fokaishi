@@ -18,6 +18,7 @@
     "@tiptap/react": "^2.11.7",
     "@tiptap/starter-kit": "^2.11.7",
     "chiron-go-round-tc-webfont-truetype": "^1.0.0",
+    "detect-font": "^0.1.5",
     "framer-motion": "^12.7.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

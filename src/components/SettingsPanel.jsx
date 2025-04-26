@@ -1,10 +1,15 @@
 import React, { Suspense, useContext } from 'react';
 import SettingsContext from '../context/SettingsContext';
-import { FaGear, FaXmark, FaRotateRight } from 'react-icons/fa6';
+import { FaGear, FaXmark, FaRotateRight, FaCloudArrowDown, FaDesktop, FaCircleCheck, FaStar } from 'react-icons/fa6';
 import { backgroundOptions } from '../utils/backgroundOptions';
 import LoadingSkeleton from './ui/LoadingSkeleton';
 const PreviewThumbnail = React.lazy(() => import('./PreviewThumbnail'));
+import { detectFont, supportedFonts } from 'detect-font';
+import { fontFamilyOptions, localFontFamily } from '../utils/fontFamilyOptions';
 
+const element = document.querySelector('#root');
+console.log(detectFont(element));
+console.log(supportedFonts(element));
 
 const SettingsPanel = () => {
   const settingsCtx = useContext(SettingsContext);
@@ -48,20 +53,54 @@ const SettingsPanel = () => {
               />
               <span>30px</span>
             </div>
-            <h3 className="text-lg font-bold mb-2">字形</h3>
-            <div className='flex gap-2.5 mb-4'>
-              <div title="切換為本地電腦的默認字體" className='w-16 h-16 rounded-md overflow-hidden border-2 border-black relative cursor-pointer bg-white' onClick={() => {
-                settingsCtx.setFontFamily(['sans-serif'])
-              }}>
-                <p className='text-5xl text-center font-serif my-2'>佛</p>
-                <p className='absolute bottom-0 w-full h-auto bg-black/60 text-xs text-white text-center'>默認字體</p>
-              </div>
-              <div title="此字體包將從雲端加載下來" className='w-16 h-16 rounded-md overflow-hidden border-2 border-black relative cursor-pointer' onClick={() => {
-                settingsCtx.setFontFamily(['"Chiron GoRound TC WS"', 'sans-serif'])
-              }}>
-                <img className='object-cover' src='/huanfangFont.jpg'/>
-                <p className='absolute bottom-0 w-full h-auto bg-black/60 text-xs text-white text-center'>昭源環方</p>
-              </div>
+            <h3 className="text-lg font-bold mb-2">字體</h3>
+            <div className='flex gap-2.5 mb-4 flex-wrap mx-3 md:mx-5 overflow-visible'>
+              {settingsCtx.localSupportedFonts.map((fontFamily) => {
+                const matchedFont = localFontFamily.find( item => item.fontFamily.includes(fontFamily) );
+                return (
+                  <div className='relative grow shrink basis-[50px]'>
+                    <div title={`本地電腦字體: ${matchedFont.title}`} className={`${settingsCtx.fontFamilyId === matchedFont.id ? "border-green-500  border-4" : "border-black"} w-16 h-16 rounded-md overflow-hidden border-2 relative cursor-pointer`} onClick={() => {
+                      settingsCtx.setFontFamilyId(matchedFont.id)
+                    }}>
+                      <p className={`fontPreview${fontFamily} text-5xl text-center my-2 pointer-events-none`}>佛</p>
+                      <p className='absolute bottom-0 w-full h-auto bg-black/60 text-xs text-white text-center z-20'>{matchedFont.title}</p>
+                      {settingsCtx.fontFamilyId === matchedFont.id && <div className='z-10 absolute inset-0 w-full h-full object-cover transition-all duration-300 text-green-500 flex justify-center items-center' ><FaCircleCheck className='size-5' fill='currentColor' stroke='white' strokeWidth={50}/></div>}
+                    </div>
+                    {matchedFont.recommend && 
+                      <div className="absolute pointer-events-none top-[5%] -left-[5%]">
+                        <span className="text-amber-300 flex">
+                          {[...Array(5)].map((_, index) => (
+                            <FaStar key={index} className='size-2.5' fill='currentColor' stroke='orange' strokeWidth={50}/>
+                          ))}
+                        </span>
+                      </div>
+                    }
+                  </div>
+                );
+              })}
+              {fontFamilyOptions.map((fontFamily) => {
+                return (
+                  <div className='relative grow shrink basis-[60px]'>
+                    <div title="此字體包將從雲端加載下來" className={`${settingsCtx.fontFamilyId === fontFamily.id ? "border-green-500 border-4" : "border-black"} w-16 h-16 rounded-md overflow-hidden border-2 relative cursor-pointer`} onClick={() => {
+                      settingsCtx.setFontFamilyId(fontFamily.id)
+                    }}>
+                      <img className='object-cover pointer-events-none' src='/huanfangFont.jpg'/>
+                      <p className='absolute bottom-0 w-full h-auto bg-black/60 text-xs text-white text-center z-20'>{fontFamily.title}</p>
+                      {settingsCtx.fontFamilyId === fontFamily.id && <div className='z-10 absolute inset-0 w-full h-full object-cover transition-all duration-300 text-green-500 flex justify-center items-center' ><FaCircleCheck className='size-5' fill='currentColor' stroke='white' strokeWidth={50}/></div>}
+                    </div>
+                    <div className='absolute top-[3%] -left-[2%] flex items-center pointer-events-none'>
+                      <FaCloudArrowDown className='size-5 text-blue-400 animate-[bounceUp_2s_infinite]' fill='currentColor' stroke='white' strokeWidth={50}/>
+                      {fontFamily.recommend && 
+                        <span className="text-amber-300 flex ">
+                          {[...Array(5)].map((_, index) => (
+                            <FaStar key={index} className='size-2.5' fill='currentColor' stroke='orange' strokeWidth={50}/>
+                          ))}
+                        </span>
+                      }
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             {/* 背景設定 */}

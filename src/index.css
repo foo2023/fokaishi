@@ -64,6 +64,34 @@ main p {
   touch-action: none; /* 禁止多點觸控干擾 */
 }
 
+.fontPreviewFangSong {
+  font-family: FangSong;
+}
+
+.fontPreviewSTFangsong {
+  font-family: STFangsong;
+}
+
+.fontPreviewSTKaiTi {
+  font-family: STKaiTi;
+}
+
+.fontPreviewKaiTi {
+  font-family: KaiTi;
+}
+
+.fontPreviewFZShuTi {
+  font-family: FZShuTi;
+}
+
+.fontPreviewArial {
+  font-family: Arial;
+}
+
+.fontPreviewsans-serif {
+  font-family: sans-serif;
+}
+
 @keyframes bounceUp {
   0% {transform: translateY(0);}
   50% {transform: translateY(-3px);}

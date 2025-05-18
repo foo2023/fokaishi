@@ -4,6 +4,7 @@ import SharedContext from '../context/SharedContext';
 import WhiteBoard from '../components/WhiteBoard';
 import SideNav from '../components/SideNav';
 import { usePageTitle } from '../utils/usePageTitle';
+import { decodeHTMLEntities } from '../utils/decodeHTMLEntities';
 
 const Item = () => {
   const ctx = useContext(SharedContext);
@@ -13,12 +14,6 @@ const Item = () => {
   }); 
 
   // 更新page 標題
-  function decodeHTMLEntities(str) {
-    const txt = document.createElement('textarea');
-    txt.innerHTML = str;
-    return txt.value;
-  }
-
   if (dataMatch[0]) {
     usePageTitle(
       decodeHTMLEntities(

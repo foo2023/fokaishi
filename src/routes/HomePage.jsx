@@ -1,10 +1,19 @@
 import React, { useContext, useMemo } from 'react';
 import SharedContext from '../context/SharedContext';
-import { Link } from 'react-router';
+import { data, Link } from 'react-router';
 import { MdDelete } from "react-icons/md";
+import { groupingByDate } from '../utils/groupingByDate';
+import Items from '../components/page/HomePage/Items';
 
 const HomePage = () => {
   const ctx = useContext(SharedContext);
+
+  // const arrangedData = [{period: 'today', data: []}, {period: 'yesterday', data: []}, {period: 'earlier', data: []}]
+  const arrangedData = useMemo(() => {
+    // groupingByDate(ctx.data);
+    return groupingByDate(ctx.data);
+
+  }, [ctx.data]);
 
   const parsedData = useMemo(() => {
     const now = new Date();
@@ -34,42 +43,23 @@ const HomePage = () => {
   }, [ctx.data]);
 
   return (
-    <div className='md:w-[calc(100%-var(--settings-panel))] w-full h-full overflow-scroll'>
+    <div className='md:w-[calc(100%-var(--settings-panel))] w-full h-full overflow-y-scroll'>
       <div className='relative z-10 max-w-[1070px] mx-auto px-2.5 mt-6'>
-        {parsedData.length > 0 ? (
-          <ul className='grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-5'>
-            {parsedData.map((i) => (
-              <li key={i.id} className='my-2'>
-                <div className='group cursor mx-1 md:mx-4 bg-amber-50/70 pb-2 rounded-md shadow-md overflow-hidden duration-200 hover:-translate-y-4'>
-                  <button
-                  type='button'
-                    title='刪除'
-                    className={`bg-red-100 text-red-400 p-2 rounded-4xl mx-0.5 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200 delay-200 cursor-pointer absolute z-20 hover:translate-y-1 hover:bg-red-200 hover:text-red-500`}
-                    onClick={() => {
-                      ctx.removeData(i.id);
-                    }}
-                  >
-                    <MdDelete />
-                  </button>
-                  <div className='relative'>
-                    <Link to={`/${i.id}`} className="absolute h-full block w-full z-10 pointer-events-auto" />
-                    <div className='overflow-hidden h-[200px] relative pointer-events-none'>
-                      <img loading="lazy" className="group-hover:scale-110 h-full w-full object-cover duration-200 relative" src={i.randomCover || '/random_cover/0.jpg'} />
-                      {i.dateTime && (
-                        <div className={`${i.is3DaysBefore ? "bg-amber-500/60 text-white" : "bg-purple-600/60 text-white"} p-2 rounded-md absolute bottom-[5%] right-[10%] backdrop-blur-md`}>
-                          {i.labelDateTime}
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <div className="group-hover:text-stone-700 mx-3 font-bold" dangerouslySetInnerHTML={{ __html: i.title }} />
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
+        {/* Latest */}
+        {arrangedData.today.length > 0 && (
+          <Items type='today' data={arrangedData.today} removeData={ctx.removeData} />
+        )
+        }
+        {arrangedData.yesterday.length > 0 && (
+          <Items type='yesterday' data={arrangedData.yesterday} removeData={ctx.removeData} />
+        )}
+        {arrangedData.twoDaysAgo.length > 0 && (
+          <Items type='twoDaysAgo' data={arrangedData.twoDaysAgo} removeData={ctx.removeData} />
+        )}
+        {arrangedData.earlier.length > 0 && (
+          <Items type='earlier' data={arrangedData.earlier} removeData={ctx.removeData} />
+        )}
+        {arrangedData.today.length <= 0 && arrangedData.yesterday.length <= 0 && arrangedData.twoDaysAgo <= 0 && arrangedData.earlier.length <= 0 && (
           <div className='bg-white/50 backdrop-blur-md rounded-md p-5 m-auto grid items-center'>
             <h2 className='text-center font-bold'>還沒有任何項目，請創建一個吧~ </h2>
             <button type='button' className='cursor-pointer p-3.5 rounded-md bg-stone-200 hover:bg-stone-300' onClick={ctx.toggleDisplayCreateForm}>

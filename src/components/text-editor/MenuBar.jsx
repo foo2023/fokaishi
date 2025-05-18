@@ -2,7 +2,7 @@
 import { FaAlignCenter, FaAlignLeft, FaAlignRight, FaBold, FaHighlighter, FaItalic, FaList, FaStrikethrough } from "react-icons/fa";
 import { GoListOrdered } from "react-icons/go";
 import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu";
-import { Toggle } from "../ui/Toggle";
+import { Toggle } from "./Toggle";
 
 
 export default function MenuBar({ editor }) {

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import SharedContext from "../context/SharedContext";
+import SharedContext from "../../context/SharedContext";
 
 function Modal({ children }) {
   const ctx = useContext(SharedContext);

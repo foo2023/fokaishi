@@ -109,3 +109,44 @@ main p {
   50% {transform: translateX(0);}
   100% {transform: translateX(-5px);}
 }
+
+/* Spinner */
+@keyframes loadingSpinnerBounder {
+  100% {transform: rotate(360deg);}
+}
+
+@keyframes loadingSpinner {
+  0% {
+    stroke-dasharray: 1, 125;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 98, 125;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 98, 125;
+    stroke-dashoffset: -124px;
+  }
+}
+
+.loading-spinner-bounder {
+  animation: loadingSpinnerBounder 1.5s linear infinite;
+  height: 100%;
+  transform-origin: center center;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.loading-spinner {
+  stroke-dasharray: 1, 125;
+  stroke-dashoffset: 0;
+  animation: 2s infinite loadingSpinner;
+  stroke: white;
+  stroke-linecap: round;
+}

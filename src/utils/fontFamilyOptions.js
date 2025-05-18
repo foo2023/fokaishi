@@ -1,8 +1,5 @@
-import { detectFont, supportedFonts } from 'detect-font';
 import { doesFontExist } from './detectFont';
 const element = document.querySelector('#root');
-console.log(detectFont(element));
-console.log(supportedFonts(element));
 
 export const fontFamilyOptions = [
   {

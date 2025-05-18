@@ -1,15 +1,13 @@
 import React, { Suspense, useContext } from 'react';
 import SettingsContext from '../context/SettingsContext';
-import { FaGear, FaXmark, FaRotateRight, FaCloudArrowDown, FaDesktop, FaCircleCheck, FaStar } from 'react-icons/fa6';
+import { FaGear, FaXmark, FaRotateRight, FaCloudArrowDown, FaCircleCheck, FaStar } from 'react-icons/fa6';
 import { backgroundOptions } from '../utils/backgroundOptions';
-import LoadingSkeleton from './ui/LoadingSkeleton';
+import LoadingSkeleton from './loading-element/LoadingSkeleton';
 const PreviewThumbnail = React.lazy(() => import('./PreviewThumbnail'));
-import { detectFont, supportedFonts } from 'detect-font';
 import { fontFamilyOptions, localFontFamily } from '../utils/fontFamilyOptions';
 
 const element = document.querySelector('#root');
-console.log(detectFont(element));
-console.log(supportedFonts(element));
+
 
 const SettingsPanel = () => {
   const settingsCtx = useContext(SettingsContext);
@@ -125,7 +123,7 @@ const SettingsPanel = () => {
             </button>
 
             {/* {關於} */}
-            <div className='mt-8 text-amber-500 font-bold'>By 净土共修@2025</div>
+            <div className='mt-8 mb-20 text-amber-500 font-bold'>By 净土共修@2025</div>
           </div>
 
         </>

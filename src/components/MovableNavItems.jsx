@@ -62,23 +62,25 @@ const MovableNavItems = ({ children }) => {
     };
   
     const onMouseUp = (e) => {
-      isClicked.current = false;
-      setWasDragged(false); // remain wasDragges back to false
-      
-      if (wasDragged) {
-        e.preventDefault(); // << 防止點擊行為
-        e.stopPropagation(); // << 可選：阻止冒泡以防影響子元件
+      if (isClicked.current) {
+        isClicked.current = false;
+        setWasDragged(false); // remain wasDragges back to false
+        
+        if (wasDragged) {
+          e.preventDefault(); // << 防止點擊行為
+          e.stopPropagation(); // << 可選：阻止冒泡以防影響子元件
+        }
+    
+        // 計算百分比位置
+        const percentX = (dragable.offsetLeft / container.offsetWidth) * 100;
+        const percentY = (dragable.offsetTop / container.offsetHeight) * 100;
+    
+        coord.current.lastXPercent = percentX;
+        coord.current.lastYPercent = percentY;
+    
+        // 儲存百分比位置
+        settingsCtx.setNavbarPosition({ x: percentX, y: percentY })
       }
-  
-      // 計算百分比位置
-      const percentX = (dragable.offsetLeft / container.offsetWidth) * 100;
-      const percentY = (dragable.offsetTop / container.offsetHeight) * 100;
-  
-      coord.current.lastXPercent = percentX;
-      coord.current.lastYPercent = percentY;
-  
-      // 儲存百分比位置
-      settingsCtx.setNavbarPosition({ x: percentX, y: percentY })
     };
   
     const onMouseMove = (e) => {

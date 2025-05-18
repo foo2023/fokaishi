@@ -1,5 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import toastify from "../components/Toast";
+import { decodeHTMLEntities } from "../utils/decodeHTMLEntities";
+import { getLatestVersion, handleVersionActions, resetLocalStorageNoDate } from "../utils/version";
 
 // initial value
 const SharedContext = createContext({
@@ -11,22 +13,31 @@ const SharedContext = createContext({
   toggleDisplayCreateForm: () => {},
 });
 
+const VERSION = getLatestVersion();
+
 export function SharedProvider({ children }) {
   const [sharedData, setSharedData] = useState([]);
   const [ displayCreateForm, setDisplayCreateForm ] = useState(false);
 
+  const isNeededUpdate = useRef(false);
+  
+  if (sharedData.length > 0 && isNeededUpdate.current) {
+    console.log("today!", sharedData);
+    resetLocalStorageNoDate(sharedData);
+  }
+  
   useEffect(() => {
     const stored = localStorage.getItem('fokaishi');
     if (stored) {
       const parsed = JSON.parse(stored);
-  
+      
       const sorted = parsed.sort((a, b) => {
         const aTime = a.dateTime ? new Date(a.dateTime).getTime() : null;
         const bTime = b.dateTime ? new Date(b.dateTime).getTime() : null;
-  
+        
         if (aTime && bTime) {
-          // 都有時間：越接近現在（越新）排前面
-          return bTime - aTime;
+          // 都有時間：越接近現在（越新）排后面
+          return aTime - bTime;
         } else if (aTime && !bTime) {
           // a 有時間，b 沒有：a 在前
           return -1;
@@ -38,9 +49,13 @@ export function SharedProvider({ children }) {
           return 0;
         }
       });
-  
+      
       setSharedData(sorted);
     }
+
+    // 获取最后一次上线的版本号码，方便处理一些版本更新的设定
+    const lastSeenVersion = localStorage.getItem('version');
+    handleVersionActions(lastSeenVersion, isNeededUpdate);
   }, []);
 
   /* 獲取上一個和下一個item 的 ID */
@@ -52,9 +67,25 @@ export function SharedProvider({ children }) {
     }
   
     const prevId = index > 0 ? sharedData[index - 1].id : null;
+    let prev = null;
+    if (prevId) {
+      let prevTitle = index > 0 ? sharedData[index - 1].title : null;
+      prevTitle = decodeHTMLEntities(
+        prevTitle.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ')
+      )
+      prev = {id: prevId, title: prevTitle};
+    }
     const nextId = index < sharedData.length - 1 ? sharedData[index + 1].id : null;
+    let next = null;
+    if (nextId) {
+      let nextTitle = index < sharedData.length - 1 ? sharedData[index + 1].title : null;
+      nextTitle = decodeHTMLEntities(
+        nextTitle.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ')
+      )
+      next = {id: nextId, title: nextTitle};
+    }
   
-    return { prev: prevId, next: nextId };
+    return { prev, next };
   }
 
   function addDataHandler(newData) {

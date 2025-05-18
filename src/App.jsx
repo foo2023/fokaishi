@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation } from "react-router";
 import React from "react";
 // import Item from "./routes/Item"
-// const delayImport = (factory, delay = 0) =>
+// const delayImport = (factory, delay = 9999999999990) =>
 //   new Promise(resolve => {
 //     setTimeout(() => resolve(factory()), delay);
 //   });
@@ -14,17 +14,18 @@ const Item = React.lazy(() => import('./routes/Item'));
 
 import Navbar from "./components/Navbar";
 import { ToastContainer } from "react-toastify";
-import CreateForm from "./components/CreateForm";
+// import CreateForm from "./components/page/CreateForm";
+const CreateForm = React.lazy(() => import("./components/page/CreateForm"));
 import { Suspense, useContext } from "react";
 import SharedContext from "./context/SharedContext";
 import SettingsContext from "./context/SettingsContext";
 import SettingsPanel from "./components/SettingsPanel";
 import { AnimatePresence } from 'framer-motion';
-import AnimatedPageWrapper from './components/AnimatedPageWrapper';
+import AnimatedPageWrapper from './components/page/AnimatedPageWrapper';
 import NotFound from "./routes/NotFound";
-import HomePageLoad from "./components/ui/HomePageLoad";
-import ItemPageLoad from "./components/ui/ItemPageLoad";
-import Test from "./routes/Test";
+import HomePageLoad from "./components/loading-element/HomePageLoad";
+import ItemPageLoad from "./components/loading-element/ItemPageLoad";
+import DefaultPageLoad from "./components/loading-element/DefaultPageLoad";
 
 export default function App() {
   const ctx = useContext(SharedContext); 
@@ -33,9 +34,12 @@ export default function App() {
   return (
       <>
         <div 
-          className="w-full md:w-[calc(100%-var(--settings-panel))] h-full overflow-auto">
+          className="w-full md:w-[calc(100%-var(--settings-panel))] h-full overflow-auto"
+        >
           <Navbar />
-          {ctx.displayCreateForm ? <CreateForm /> : null}
+          <Suspense fallback={<DefaultPageLoad />}>
+            {ctx.displayCreateForm ? <CreateForm /> : null}
+          </Suspense>
           <ToastContainer />
           <div className="fixed top-0 left-0 w-full h-full z-[-1] pointer-events-none">
             <video src={`/${settingsCtx.background.path}`} className="object-cover w-full h-full" autoPlay loop muted disablePictureInPicture playsInline={true} />
@@ -58,7 +62,6 @@ function AnimatedRoutes() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
             <Route path="/" element={<AnimatedPageWrapper><HomePage /></AnimatedPageWrapper>} />
-            <Route path="/test" element={<AnimatedPageWrapper><Test /></AnimatedPageWrapper>}/>
             <Route path="/:id" element={<AnimatedPageWrapper><Item /></AnimatedPageWrapper>}/>
             <Route path="*" element={<AnimatedPageWrapper><NotFound/></AnimatedPageWrapper>} />
         </Routes>

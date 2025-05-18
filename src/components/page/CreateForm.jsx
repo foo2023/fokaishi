@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import SharedContext from '../context/SharedContext';
-import Modal from './Modal';
-import TextEditor from './text-editor/TextEditor';
+import SharedContext from "../../context/SharedContext";
+import Modal from '../UI/Modal';
+import TextEditor from '../text-editor/TextEditor';
 
 const CreateForm = () => {
   const [ inputDesc, setInputDesc ] = useState();

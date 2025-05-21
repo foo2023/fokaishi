@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import toastify from "../components/Toast";
 import { backgroundOptions } from "../utils/backgroundOptions";
-import { localFontFamily, initLocalSupportedFont, fontFamilyOptions } from "../utils/fontFamilyOptions";
+import { localFontFamily, getInitLocalSupportedFont, webFontFamily } from "../utils/fontFamilyOptions";
 
 const defaultBg = backgroundOptions[0]; // default sunflower bg
 
@@ -89,7 +89,7 @@ export function SettingsProvider({ children }) {
   const checkFontsAvailable = (font) => {
     return (
       localSupportedFonts.includes(font) ||
-      fontFamilyOptions.some((f) => f.id === font)
+      webFontFamily.some((f) => f.id === font)
     );
   };
 
@@ -105,7 +105,7 @@ export function SettingsProvider({ children }) {
   useEffect(() => {
     const checkFonts = async () => {
       console.log("開始執行 checking local support 的 font family!!");
-      const fonts = await initLocalSupportedFont();
+      const fonts = await getInitLocalSupportedFont();
       setLocalSupportedFonts(fonts);
     };
     
@@ -137,7 +137,7 @@ export function SettingsProvider({ children }) {
         localStorage.setItem('font-family', JSON.stringify(fontFamilyId));
         let fontFamily;
         const localFontFind = localFontFamily.find(item => item.id === fontFamilyId);
-        const cloudFontFind = fontFamilyOptions.find(item => item.id === fontFamilyId);
+        const cloudFontFind = webFontFamily.find(item => item.id === fontFamilyId);
         if (localFontFind) {
           fontFamily = localFontFind.fontFamily;
         } else if (cloudFontFind) {

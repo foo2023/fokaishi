@@ -11,13 +11,13 @@ const Item = () => {
   const { id }  = useParams();
   const dataMatch = ctx.data.filter((item) => {
     return item.id === Math.floor(id);
-  }); 
+  })[0]; 
 
   // 更新page 標題
-  if (dataMatch[0]) {
+  if (dataMatch) {
     usePageTitle(
       decodeHTMLEntities(
-        dataMatch[0].title.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ')
+        dataMatch.title.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ')
       )
     );
   } else {
@@ -26,11 +26,11 @@ const Item = () => {
   
 
   return (
-    <div className="w-full md:w-[calc(100%-var(--settings-panel))] h-full fixed flex items-center justify-center top-0">
+    <div className="w-full md:w-[calc(100%-var(--settings-panel))] h-full flex items-center justify-center">
       
-      {dataMatch[0] ? (
+      {dataMatch ? (
         <>
-          <WhiteBoard title={dataMatch[0].title} description={dataMatch[0].description} />
+          <WhiteBoard title={dataMatch.title} description={dataMatch.description} />
           <SideNav id={id} />
         </>
         

@@ -1,7 +1,6 @@
-import { doesFontExist } from './detectFont';
-const element = document.querySelector('#root');
+import { isFontExist } from './detectFont';
 
-export const fontFamilyOptions = [
+export const webFontFamily = [
   {
     id: 'ChironGoRoundTCWS',
     fontFamily: '"Chiron GoRound TC WS"',
@@ -48,6 +47,12 @@ export const localFontFamily = [
     recommend: false,
   },
   {
+    id: 'SimSun',
+    fontFamily: 'SimSun',
+    title: '宋體',
+    recommend: false,
+  },
+  {
     id: 'PingFang',
     fontFamily: '"PingFang TC"',
     title: 'IOS字體',
@@ -67,11 +72,12 @@ export const localFontFamily = [
   },
 ];
 
-export async function initLocalSupportedFont() {
+export async function getInitLocalSupportedFont() {
   const supportedFonts = [];
 
+  // 整理出 user device supported 的字体
   for (const font of localFontFamily) {
-    const exists = await doesFontExist(font.fontFamily);
+    const exists = await isFontExist(font.fontFamily);
     if (font.id === 'fontdefault') {
       supportedFonts.push('Arial');
     } else if (exists) {

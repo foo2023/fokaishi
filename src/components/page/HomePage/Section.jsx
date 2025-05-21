@@ -3,20 +3,26 @@ import { FaChevronDown, FaChevronRight } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-const Items = ({type, data, removeData}) => {
-  const label = type === 'today' ? '今天' : type === 'yesterday' ? '昨天' : type === 'twoDaysAgo' ? '前天' : '早期';
+const Section = ({type, label, data, removeData}) => {
   const [collapse, setCollapse] = useState(false);
+
+  useEffect(() => {
+    if (type === 'earlier') {
+      setCollapse(true);
+    }
+  }, []);
+
   function handleToggleCollapse () {
     setCollapse(prev => !prev);
   }
-  if (type === 'earlier') {
-    useEffect(() => {
-      setCollapse(true);
-    }, []);
-  }
   return (
     <>
-      <div className="bg-amber-50/40 w-full p-3 cursor-pointer rounded-md hover:bg-amber-50/60 border-1 hover:border-black border-black/0 transition-all" onClick={handleToggleCollapse}><p className="inline-block">{collapse ? <FaChevronRight /> : <FaChevronDown />}</p><p className="inline-block">{label}</p></div>
+      <div className="bg-amber-50/40 w-full p-3 cursor-pointer rounded-md hover:bg-amber-50/60 border-1 hover:border-black border-black/0 transition-all" onClick={handleToggleCollapse}>
+        <p className="inline-block">
+          {collapse ? <FaChevronRight /> : <FaChevronDown />}
+        </p>
+        <p className="inline-block">{label}</p>
+      </div>
       {collapse === false && 
       <ul className="grid gap-2">
         {data.map((i) => (
@@ -65,6 +71,7 @@ const Items = ({type, data, removeData}) => {
                     </div>
                   )}
                 </div>
+                
               </div>
             </div>
           </li>
@@ -74,4 +81,4 @@ const Items = ({type, data, removeData}) => {
   );
 };
 
-export default Items;
+export default Section;

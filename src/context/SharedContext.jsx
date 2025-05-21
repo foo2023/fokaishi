@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import toastify from "../components/Toast";
 import { decodeHTMLEntities } from "../utils/decodeHTMLEntities";
-import { getLatestVersion, handleVersionActions, resetLocalStorageNoDate } from "../utils/version";
+import { handleVersion, filterOutUndatedItems } from "../utils/version";
 
 // initial value
 const SharedContext = createContext({
@@ -13,8 +13,6 @@ const SharedContext = createContext({
   toggleDisplayCreateForm: () => {},
 });
 
-const VERSION = getLatestVersion();
-
 export function SharedProvider({ children }) {
   const [sharedData, setSharedData] = useState([]);
   const [ displayCreateForm, setDisplayCreateForm ] = useState(false);
@@ -22,8 +20,7 @@ export function SharedProvider({ children }) {
   const isNeededUpdate = useRef(false);
   
   if (sharedData.length > 0 && isNeededUpdate.current) {
-    console.log("today!", sharedData);
-    resetLocalStorageNoDate(sharedData);
+    filterOutUndatedItems(sharedData);
   }
   
   useEffect(() => {
@@ -55,7 +52,8 @@ export function SharedProvider({ children }) {
 
     // 获取最后一次上线的版本号码，方便处理一些版本更新的设定
     const lastSeenVersion = localStorage.getItem('version');
-    handleVersionActions(lastSeenVersion, isNeededUpdate);
+    console.log("version: ", lastSeenVersion);
+    handleVersion(lastSeenVersion, isNeededUpdate);
   }, []);
 
   /* 獲取上一個和下一個item 的 ID */

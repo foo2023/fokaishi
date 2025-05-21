@@ -1,5 +1,10 @@
 import isElement from 'is-element';
 
+/* 
+* 用途: 这是一个检查 user local support 的字体
+* 来源: npm i detect-font (经过修改适用中文字体检查)
+*/
+
 /**
  * @constant DEFAULT_OPTIONS
  * @type {Object}
@@ -71,7 +76,13 @@ export const supportedFonts = (element, options = DEFAULT_OPTIONS) => {
 };
 
 
-export async function doesFontExist(fontName) {
+/*
+* FUNCTION: isFontExist
+* IMPORT: fontName (String)
+* EXPORT: (boolean)
+* 用途: 先传入一个字体名称，然后进行检查是否可用
+*/
+export async function isFontExist(fontName) {
   await document.fonts.ready; // 等字體載入完
   // creating our in-memory Canvas element where the magic happens
   

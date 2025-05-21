@@ -69,7 +69,7 @@ const WhiteBoard = ({title, description}) => {
       className="cursor-pointer bg-white/70 backdrop-blur-md rounded-xl shadow-xl border border-gray-200 relative z-10"
       style={{ width: `${settingsCtx.whiteBoard.width}%`, height: `${settingsCtx.whiteBoard.height}%` }}
     >
-      <div className='overflow-auto [width:98%] [height:98%]'>
+      <div className='overflow-auto w-[98%] h-[98%]'>
         <div className="grid justify-center font-bold" dangerouslySetInnerHTML={{ __html: title }} />
         <div
           className="p-6 text-gray-800 text-base leading-relaxed whitespace-pre-wrap"

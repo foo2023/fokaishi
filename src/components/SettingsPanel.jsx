@@ -4,9 +4,11 @@ import { FaGear, FaXmark, FaRotateRight, FaCloudArrowDown, FaCircleCheck, FaStar
 import { backgroundOptions } from '../utils/backgroundOptions';
 import LoadingSkeleton from './loading-element/LoadingSkeleton';
 const PreviewThumbnail = React.lazy(() => import('./PreviewThumbnail'));
-import { fontFamilyOptions, localFontFamily } from '../utils/fontFamilyOptions';
+import { webFontFamily, localFontFamily } from '../utils/fontFamilyOptions';
+import { getLatestVersion } from '../utils/version';
 
 const element = document.querySelector('#root');
+const VERSION = getLatestVersion();
 
 
 const SettingsPanel = () => {
@@ -76,7 +78,7 @@ const SettingsPanel = () => {
                   </div>
                 );
               })}
-              {fontFamilyOptions.map((fontFamily) => {
+              {webFontFamily.map((fontFamily) => {
                 return (
                   <div className='relative grow shrink basis-[60px]'>
                     <div title="此字體包將從雲端加載下來" className={`${settingsCtx.fontFamilyId === fontFamily.id ? "border-green-500 border-4" : "border-black"} w-16 h-16 rounded-md overflow-hidden border-2 relative cursor-pointer`} onClick={() => {
@@ -123,7 +125,7 @@ const SettingsPanel = () => {
             </button>
 
             {/* {關於} */}
-            <div className='mt-8 mb-20 text-amber-500 font-bold'>By 净土共修@2025</div>
+            <div className='mt-8 mb-20 text-amber-500 font-bold'>By 净土共修@2025<br />版本号：{VERSION}</div>
           </div>
 
         </>

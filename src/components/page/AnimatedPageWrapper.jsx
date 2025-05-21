@@ -4,7 +4,7 @@ const pageVariants = {
   initial: {
     scale: 0.9,
     opacity: 0,
-    height: "0%",
+    height: "100%",
   },
   in: {
     scale: 1,
@@ -16,12 +16,12 @@ const pageVariants = {
   out: {
     scale: 0.9,
     opacity: 0,
-    height: "0%",
+    height: "100%",
   },
 };
 
 const pageTransition = {
-  duration: 0.4,
+  duration: 0.3,
   ease: "easeInOut",
 };
 
